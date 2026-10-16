@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Recensement des chauffeurs{% endblock %}
+{% block content %}
+<style>
+  body { background:#f5f5f5 !important; color:#171717; }
+  .driver-header { background:linear-gradient(120deg,#111,#b5121b); color:#fff; border-radius:18px; padding:28px 32px; }
+  .driver-card { border:0; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,.07); }
+  .driver-card .form-control,.driver-card .form-select { border-radius:10px; padding:.72rem .85rem; }
+  .driver-label { color:#555; font-size:.76rem; font-weight:750; text-transform:uppercase; }
+  .driver-photo { width:100%; height:150px; object-fit:cover; border-radius:10px; background:#f1f1f1; }
+  .driver-thumb { width:52px; height:45px; border-radius:8px; object-fit:cover; }
+  .btn-danger { background:#b5121b; border-color:#b5121b; }
+</style>
+<div class="container-fluid py-4" style="max-width:1400px">
+  <div class="driver-header mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3"><div><div class="small text-uppercase opacity-75">Gestion du personnel</div><h1 class="h3 mb-1">Recensement des chauffeurs</h1><p class="mb-0 opacity-75">Enregistrez le chauffeur et ses documents de permis.</p></div><a href="{{ url_for('dashboard') }}" class="btn btn-light">← Tableau de bord</a></div>
+  {% with messages = get_flashed_messages(with_categories=true) %}{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+  <div class="card driver-card mb-4"><div class="card-body p-4 p-lg-5"><form method="post" enctype="multipart/form-data"><h2 class="h5 mb-3">Informations du chauffeur</h2><div class="row g-3">
+    <div class="col-md-4"><label class="driver-label">Nom *</label><input name="nom" class="form-control" required></div>
+    <div class="col-md-4"><label class="driver-label">Prénom(s)</label><input name="prenom" class="form-control"></div>
+    <div class="col-md-4"><label class="driver-label">Téléphone</label><input name="telephone" type="tel" class="form-control"></div>
+    <div class="col-md-3"><label class="driver-label">CIN</label><input name="cin" class="form-control"></div>
+    <div class="col-md-5"><label class="driver-label">Adresse</label><input name="adresse" class="form-control"></div>
+    <div class="col-md-2"><label class="driver-label">Permis</label><select name="type_permis" class="form-select"><option value="">Choisir</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>AB</option><option>CD</option><option>Autre</option></select></div>
+    <div class="col-md-2"><label class="driver-label">Expérience</label><input name="annee_experience" type="number" min="0" max="60" class="form-control" placeholder="Années"></div>
+  </div><hr class="my-4"><h2 class="h5 mb-3">Photos et permis</h2><div class="row g-3">
+    <div class="col-md-4"><label class="driver-label">Photo du chauffeur</label><img id="driver-preview" class="driver-photo mb-2" alt="Photo chauffeur"><input name="chauffeur_image" class="form-control driver-file" data-preview="driver-preview" type="file" accept="image/jpeg,image/png,image/webp"></div>
+    <div class="col-md-4"><label class="driver-label">Permis recto</label><img id="license-front-preview" class="driver-photo mb-2" alt="Permis recto"><input name="permis_recto" class="form-control driver-file" data-preview="license-front-preview" type="file" accept="image/jpeg,image/png,image/webp"></div>
+    <div class="col-md-4"><label class="driver-label">Permis verso</label><img id="license-back-preview" class="driver-photo mb-2" alt="Permis verso"><input name="permis_verso" class="form-control driver-file" data-preview="license-back-preview" type="file" accept="image/jpeg,image/png,image/webp"></div>
+  </div><div class="text-end mt-4"><button class="btn btn-danger px-4" type="submit">Enregistrer le chauffeur</button></div></form></div></div>
+  <div class="card driver-card"><div class="card-body p-4"><h2 class="h5 mb-3">Chauffeurs recensés <span class="badge bg-dark">{{ chauffeurs|length }}</span></h2><div class="table-responsive"><table class="table align-middle"><thead><tr><th>Photo</th><th>Nom</th><th>Téléphone</th><th>Permis</th><th>Expérience</th><th>Documents</th></tr></thead><tbody>
+  {% for chauffeur in chauffeurs %}<tr><td>{% if chauffeur.image %}<img class="driver-thumb" src="{{ url_for('static', filename='driver_uploads/' ~ chauffeur.image) }}">{% else %}—{% endif %}</td><td><strong>{{ chauffeur.nom }} {{ chauffeur.prenom }}</strong><small class="d-block text-muted">{{ chauffeur.cin or 'CIN non renseignée' }}</small></td><td>{{ chauffeur.telephone or '—' }}</td><td>{{ chauffeur.type_permis or '—' }}</td><td>{{ chauffeur.annee_experience or 0 }} an(s)</td><td>{% if chauffeur.images.get('permis_recto') %}<span class="badge bg-success">Permis reçu</span>{% else %}<span class="badge bg-secondary">Incomplet</span>{% endif %}</td></tr>{% else %}<tr><td colspan="6" class="text-center text-muted py-4">Aucun chauffeur recensé.</td></tr>{% endfor %}
+  </tbody></table></div></div></div>
+</div>
+<script>document.querySelectorAll('.driver-file').forEach(input => input.addEventListener('change', function(){ const file=this.files[0]; if(file) document.getElementById(this.dataset.preview).src=URL.createObjectURL(file); }));</script>
+{% endblock %}

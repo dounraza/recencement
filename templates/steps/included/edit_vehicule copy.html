@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Vehicle</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <!-- EasyUI CSS & JS -->
+  <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/default/easyui.css">
+  <script type="text/javascript" src="https://www.jeasyui.com/easyui/jquery.easyui.min.js"></script>
+
+  <!-- Optionnel : Thème Bootstrap pour EasyUI -->
+  <link rel="stylesheet" type="text/css" href="https://www.jeasyui.com/easyui/themes/bootstrap/easyui.css">
+    <style>
+        .container {
+            margin-top: 20px;
+        }
+        .sidebar {
+            border-right: 1px solid #ddd;
+            height: 100vh; /* Par défaut, sur les écrans de bureau */
+        }
+
+        /* Media query pour les écrans de moins de 768px (mobile et tablettes en mode portrait) */
+        @media (max-width: 912px) {
+            .sidebar {
+                height: 32vh; /* Sur mobile, on réduit la hauteur à 32vh */
+            }
+             
+            .details-panel {
+                 padding: 22px;
+                 margin-top: -16% !important;
+            }
+        }
+         @media (max-width: 360px) {
+            .sidebar {
+                height: 32vh; /* Sur mobile, on réduit la hauteur à 32vh */
+            }
+             
+            .details-panel {
+                 padding: 22px;
+                 margin-top: 12% !important;
+            }
+        }
+        .details-panel {
+            padding: 20px;
+           
+        }
+        .nav-pills > li.active > a {
+            background-color: red;
+        }
+        .form-control {
+            width: 100%;
+        }
+        .image-placeholder {
+            width: 250px;
+            height: 100px;
+            background: #ddd;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-disabled {
+            background-color: #ddd;
+            border-color: #ddd;
+            color: #888;
+        }
+        #loadingOverlay,#loadingOverlayP,#loadingOverlay1,#loadingOverlayreconizer,#loadingOverlayvehic_store,#loadingOverlaypaper,#loadingOverlayrec{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5); /* Fond gris semi-transparent */
+    display: none; /* Caché par défaut */
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.loading-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+}
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            
+            <div class="col-md-3 sidebar">
+                
+                <h3>Edit Vehicle</h3>
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="#" id="viewVehicleList">Retour à la liste des vehicles</a></li>
+                    <li class="active"><a href="#" data-target="details">Vehicle Information</a></li>
+                    <li><a href="#"data-target="pictures_vehicle" >Vehicle Pictures</a></li>
+                    <li><a href="#"data-target="paper_vehicle">Paper </a></li>
+                    <li><a href="#" data-target="team_vehicle">Team </a></li>
+                    
+                </ul>
+            </div>
+            
+            <div id="content-panel" class="col-md-9 details-panel">
+                <!-- Section Vehicle Information -->
+                
+                <div id="details" class="content-section">
+                    <h4>Details</h4>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="image-placeholder" id="imagePreview">
+                                <img id="devant_vehicule" src="{{devant_image}}" alt="Preview" style="max-width: 100%; max-height: 100%; display: none;">
+                            </div> <br>
+                            <input type="file" onchange="previewImage(this)" name="devant_vehicule" id="devant_vehicule1"> <br>
+                            <textarea name="data_response" id="data_response" rows="5" cols="15"style="display:none"></textarea>
+                            <input type="hidden"  name="username" id="username" value="{{username}}">
+                          
+
+                        </div>
+                        <br>
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label>Ligne Coopérative</label><br>
+                                
+                                <div >
+                                <input id="combogrid" name="cooperative"class="form-control" style="width:100%">
+                                </div>
+                                <!-- <select id="cooperative" name="cooperative"  class="form-control select2" style="width: 100%;">
+                                    <option value="">Choose one...</option>
+                                      {% for item in record %}
+                                            <option value="{{item.ligne_variance_id}}" {% if item.ligne_variance_id == ligne_variance_id %} selected {% endif %}>{{item.ligne}}</option>
+                                        {% endfor %}
+                                </select> -->
+                            </div>
+                            <div class="form-group">
+                                <label>Palque d'Immatriculation Vehicule</label>
+                                <input type="text" class="form-control" id="immatriculation" name="immatriculation" value="{{plaque}}">
+                                <input type="hidden" name="recencement"id="recencement" value="oui">
+                            </div>
+                            <div class="form-group">
+                                <label>Marque</label>
+                                <input type="text" id="marque" name="marque" class="form-control" value="{{marque}}">
+                            </div>
+                            <div class="form-group">
+                                <label>Place</label>
+                                <!-- <input type="number" id="nbplc_vehic" name="nbplc_vehic" class="form-control" value="28"> -->
+                                <select id="nbplc_vehic" name="nbplc_vehic" class="form-control">
+                                        <option value="18">18</option>
+                                        <option value="28">28</option>
+                                        <option value="32">32</option>
+                                        <option value="45">45</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                 <label>Publicité</label>
+                                <!-- <input type="number" id="nbplc_vehic" name="nbplc_vehic" class="form-control" value="28"> -->
+                                <select id="publicite" name="publicite" class="form-control">
+                                        <option value="---"></option>
+                                        <option value="SP">Sans Publicité</option>
+                                        <option value="AP">Avec Publicité</option>
+                                       
+                                </select>
+                            </div>
+                            <!-- <div class="form-group">
+                                <label>Elligibilité sur la Publicité Exterieur</label><br>
+                                <label class="radio-inline"><input type="radio" name="ell_ext" id="ell_ext_ok" value="OK" onchange="toggleRadio('ell_ext_ok', 'ell_ext_ko')" > OK</label>
+                                <label class="radio-inline"><input type="radio" name="ell_ext" id="ell_ext_ko"  value="KO" onchange="toggleRadio('ell_ext_ko', 'ell_ext_ok')"> KO</label>
+                            </div>
+                            <div class="form-group">
+                                <label>Elligibilité sur la Publicité Intérieur</label><br>
+                                <label class="radio-inline"><input type="radio" id="ell_int_ok" name="ell_int" value="OK" onchange="toggleRadio('ell_int_ok', 'ell_int_ko')"> OK</label>
+                                <label class="radio-inline"><input type="radio" id="ell_int_ko" name="ell_int" value="KO" onchange="toggleRadio('ell_int_ko', 'ell_int_ok')"> KO</label>
+                            </div> -->
+                        <div id="publicite_section" style="display: none;">
+                            <!-- Elligibilité sur la Publicité Exterieur -->
+                            <div class="form-group">
+                                <label>Elligibilité sur la Publicité Exterieur</label><br>
+                                <label class="radio-inline"><input type="radio" name="ell_ext" id="ell_ext_ok" value="OK" onchange="toggleRadio('ell_ext_ok', 'ell_ext_ko')"> OK</label>
+                                <label class="radio-inline"><input type="radio" name="ell_ext" id="ell_ext_ko" value="KO" onchange="toggleRadio('ell_ext_ko', 'ell_ext_ok')"> KO</label>
+                            </div>
+                            
+                            <!-- Elligibilité sur la Publicité Intérieur -->
+                            <div class="form-group">
+                                <label>Elligibilité sur la Publicité Intérieur</label><br>
+                                <label class="radio-inline"><input type="radio" id="ell_int_ok" name="ell_int" value="OK" onchange="toggleRadio('ell_int_ok', 'ell_int_ko')"> OK</label>
+                                <label class="radio-inline"><input type="radio" id="ell_int_ko" name="ell_int" value="KO" onchange="toggleRadio('ell_int_ko', 'ell_int_ok')"> KO</label>
+                            </div>
+                        </div>
+                        <div id="publicite_section_ap" style="display: none;">
+                            <!-- Elligibilité sur la Publicité Exterieur -->
+                             <div class="form-group">
+                                <label>Annonceur</label><br>
+                                 <select id="annonceur" name="annonceur" class="form-control">
+                                        <option value="---"></option>
+                                        <option value="CPP">CPP</option>
+                                        <option value="Other">Autres..</option>
+                                </select>
+
+                            </div>
+                            <div class="form-group">
+                                <label>Commentaire</label><br>
+                                <input type="text" class="form-control" value="{{comments}}" name="comments" id="comments">
+                                
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+
+                    <hr>
+                    <br>
+                    <button class="btn btn-danger btn-block" id="vehicle_pointage" onclick="save_vehicule()">Save Changes</button>
+                    <div id="loadingOverlay1"style="display:none">
+                        <div class="loading-content">
+                            <h3>Chargement en cours ...</h3>
+                            <i class="fa fa-spinner fa-spin fa-3x"></i>
+                        </div>
+                    </div>
+                    <div id="loadingOverlayreconizer"style="display:none">
+                        <div class="loading-content">
+                            <h3>Reconnaissance du plaque en cours ...</h3>
+                            <i class="fa fa-spinner fa-spin fa-3x"></i>
+                        </div>
+                    </div>
+                    
+                </div>
+
+                <!-- Section Vehicle Pictures (hidden by default) -->
+                <div id="pictures_vehicle" class="content-section" style="display: none;">
+                    <h4>Vehicle Pictures</h4>
+                    <div class="row">
+                        {% include 'steps/included/store_vehicule.html' %}
+                    </div>
+                </div>
+ 
+            <div id="paper_vehicle" class="content-section" style="display: none;">
+                <div class="row">
+                    {% include 'steps/included/paper.html' %}
+                </div>
+            </div>
+            <div id="team_vehicle" class="content-section" style="display: none;">
+                <div class="row">
+                    {% include 'steps/included/team.html' %}
+                </div>
+            </div>
+            
+            </div> 
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("viewVehicleList").addEventListener("click", function(event) {
+            event.preventDefault();  // Empêche le comportement par défaut (redirection immédiate)
+
+            // Redirection vers la route Flask
+            window.location.href = "{{ url_for('listeViewVehicule') }}";    
+         });
+        $(document).ready(function(){
+            $(".nav-pills li a").click(function(e){
+                e.preventDefault();
+                
+                var target = $(this).data("target");
+
+                // Cacher toutes les sections
+                $(".content-section").hide();
+
+                // Afficher la section sélectionnée
+                $("#" + target).show();
+
+                // Supprimer la classe active de tous les onglets
+                $(".nav-pills li").removeClass("active");
+
+                // Ajouter la classe active à l'élément cliqué
+                $(this).parent().addClass("active");
+            });
+        });
+function previewImage(input) {
+          
+        var file = input.files[0];
+        const inputId = input.name; 
+        
+        if (file) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+            const img = new Image();
+            img.src = e.target.result;
+            img.onload = function() {
+                const maxWidth = 300; // Largeur maximale pour l'aperçu
+                const maxHeight = 300; // Hauteur maximale pour l'aperçu
+                let width = img.width;
+                let height = img.height;
+                // Maintenir le ratio d'aspect
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
+                }
+                const canvas = document.createElement("canvas");
+                const ctx = canvas.getContext("2d");
+
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Convertir l'image redimensionnée en données Base64 (compression)
+                const compressedDataUrl = canvas.toDataURL("image/jpeg", 0.7); // 0.7 est la qualité, tu peux ajuster (de 0 à 1)
+                const compressedSizeKB = (compressedDataUrl.length / 1024).toFixed(10);
+                // const fileSizeKB = (file.size / 1024).toFixed(2);
+                // alert(compressedSizeKB);
+                // Mise à jour de l'image d'aperçu avec les nouvelles dimensions
+              
+                const imgElement = document.getElementById(inputId);
+                imgElement.src = compressedDataUrl;//e.target.result;
+                imgElement.style.display = "block"; // Afficher l'image
+
+                //check
+                // const byteString = atob(compressedDataUrl.split(',')[1]); // Décode la partie base64
+                // const ab = new ArrayBuffer(byteString.length);
+                // const ia = new Uint8Array(ab);
+
+                // for (let i = 0; i < byteString.length; i++) {
+                //     ia[i] = byteString.charCodeAt(i);
+                // }
+
+                // const compressedBlob = new Blob([ab], { type: "image/jpeg" });
+
+                // // Créer un objet File à partir du Blob redimensionné
+                // resizedFile = new File([compressedBlob], file.name, { type: "image/jpeg" });
+                // const inputFile = document.getElementById(inputId);
+                // const dataTransfer = new DataTransfer(); // Créer un objet DataTransfer
+                // dataTransfer.items.add(resizedFile); // Ajouter le fichier redimensionné
+                // inputFile.files = dataTransfer.files; // Assigner à l'input file
+                };
+            };
+            reader.readAsDataURL(file);
+            if(inputId=="devant_vehicule"){
+                setInformation();
+            }
+          
+        }
+
+        function setInformation(){
+            // document.getElementById('immatriculation').value = "refrdsdfsf";
+            var json_data=document.getElementById("data_response");
+            var plaque_name=document.getElementById("immatriculation");
+        
+        let files = new FormData(), // you can consider this as 'data bag'
+        url = '/reconizer';
+        
+        files.append('fichier', $('#devant_vehicule1')[0].files[0]);
+        document.getElementById('loadingOverlayreconizer').style.display = 'flex';
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    processData: false,
+                    contentType: false,
+                    data: files,
+                    success: function (response) {
+                        console.log(response);
+                        document.getElementById('loadingOverlayreconizer').style.display = 'none';
+                        datavalue=JSON.parse(response);
+                        plaque=datavalue.plaque;
+                        json_data.value +=response;
+                        plaque_name.textContent =plaque;
+                        
+                        $('#immatriculation').val(plaque);
+                        var element =document.getElementById("action_btn");
+                    
+                            var check=element.style.display;
+                            if(check==='none'){
+                                element.style.display = "block";
+                            }else{
+                                element.style.display = "none";
+                            }
+                        
+                    },
+                    error: function (err) {
+                        console.log(err);
+                        document.getElementById('loadingOverlayreconizer').style.display = 'none';
+                        json_data.value +="Plaque non identifié!" ;
+                    }
+                });
+        }
+    }
+    
+    function showForm(a) {
+        if(a=='chauffeur'){
+            document.getElementById("chauffeurForm").style.display = "block";
+            document.getElementById("receveurForm").style.display = "none";
+            document.getElementById("proprietaireForm").style.display = "none";
+             
+        }
+        if(a=='receveur'){
+          
+            document.getElementById("chauffeurForm").style.display = "none";
+            document.getElementById("receveurForm").style.display = "block";
+            document.getElementById("proprietaireForm").style.display = "none";
+        
+        }
+        if(a=='proprio'){
+            document.getElementById("chauffeurForm").style.display = "none";
+            document.getElementById("receveurForm").style.display = "none";
+            document.getElementById("proprietaireForm").style.display = "block";
+        }
+    }
+    function toggleRadio(selected, other) {
+        // Décoche l'autre option si l'une est sélectionnée
+        var selectedRadio = document.querySelector(`input[name="${selected}"]:checked`);
+        if (selectedRadio) {
+            document.querySelectorAll(`input[name="${other}"]`).forEach(function(radio) {
+                radio.checked = false;
+            });
+        }
+    }
+
+     function save_vehicule() {
+            var button = document.getElementById("vehicle_pointage");
+            
+            // Désactiver le bouton pour éviter les doubles clics
+            button.disabled = true;
+            
+            // Modifier le texte du bouton
+            button.innerText = "Saving...";
+            
+            // Simuler une action (ex: envoi de données)
+            setTimeout(function() {
+                
+                button.classList.remove("btn-danger");
+                
+                call_ajax_save();
+                button.innerText = "Saved!";
+                button.classList.add("btn-success");
+                // Réactiver le bouton après quelques secondes si nécessaire
+                setTimeout(function() {
+                    button.disabled = false;
+                    button.innerText = "Save Changes";
+                    button.classList.remove("btn-success");
+                    button.classList.add("btn-danger");
+                }, 3000);
+            }, 2000);
+        }
+
+      function call_ajax_save(){
+        let ellExtValue = document.querySelector('input[name="ell_ext"]:checked');
+        ellExtValue = ellExtValue ? ellExtValue.value : "Non sélectionné";
+
+        let ellIntValue = document.querySelector('input[name="ell_int"]:checked');
+        ellIntValue = ellIntValue ? ellIntValue.value : "Non sélectionné";
+
+        var x = document.getElementById("data_response").value;
+        username=$('#username').val();
+        recencement=$('#recencement').val();
+        cooperative=$('#combogrid').val();
+        plaque=$('#immatriculation').val();
+        marque=$('#marque').val();
+        nb_place=$('#nbplc_vehic').val();
+        annonceur=$('#annonceur').val();
+        comments=$('#comments').val();
+        publicite=$('#publicite').val();
+         
+        // userid=$('#userid').val();
+        // username=$('#username').val();
+        ell_ext=ellExtValue;
+        ell_int=ellIntValue;
+       
+        
+        url = '/sendPointage';
+        var files = new FormData(); 
+        
+        var fileInputs = document.querySelectorAll("input[type='file']");
+        fileInputs.forEach(function(fileInput) {
+            if (fileInput.files.length > 0) {
+                for (var j = 0; j < fileInput.files.length; j++) {
+                    var file = fileInput.files[j];
+                   
+                     files.append(fileInput.name, file);
+                    
+                }
+            }
+        });
+
+        // // Vérifier si les fichiers sont bien ajoutés
+        // for (var pair of files.entries()) {
+        //     console.log("test"); 
+        //     console.log(pair[0], pair[1]); 
+        // }
+       
+
+        document.getElementById('loadingOverlay1').style.display = 'flex';
+        files.append('data_json',x);
+        files.append('cooperative',cooperative);
+        files.append('recencement',recencement);
+        files.append('plaque_im',plaque);
+        files.append('marque',marque);
+        files.append('nbplc_vehic',nb_place);
+        files.append('ell_ext',ell_ext);
+        files.append('ell_int',ell_int);
+        files.append('ell_int',ell_int);
+        files.append('annonceur',annonceur);
+        files.append('comments',comments);
+        files.append('haspublicite',publicite);
+        
+        // files.append('userid',userid);
+        files.append('username',username);
+        $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+           console.log(response);
+           alert('INSERTION VEHICULE AVEC SUCCES!')
+          // setTimeout(showSuccessMessageAndReload("Pointage effectué",'Pointage'), 3000);  
+         
+          document.getElementById('loadingOverlay1').style.display = 'none';
+          document.querySelector('a[data-target="pictures_vehicle"]').click();
+
+        // Ajouter un petit délai avant la redirection (optionnel)
+        setTimeout(function() {
+            window.location.href = "/edit_vehicle/" +plaque;
+        }, 1500); // 
+        //   document.querySelector('a[data-target="pictures_vehicle"]').click();
+      //  $('#vehicle').value=plaque;
+        },
+        error: function (err) {
+            console.log(err);
+            alert('Une Erreur s est produite!')
+            document.getElementById('loadingOverlay1').style.display = 'none';
+        }
+    });
+    }
+    
+
+    async function save_file_vehicule(){
+        let files = new FormData(), // you can consider this as 'data bag'
+        url = '/sendFileVehicule';
+        
+    
+        const derriere_vehicule = document.getElementById('derriere_vehicule');
+        const gauche_vehicule = document.getElementById('gauche_vehicule');
+        const droite_vehicule = document.getElementById('droite_vehicule');
+        const interieur_vehicule = document.getElementById('interieur_vehicule');
+        recencement_file_vehic=$('#recencement_file_vehic').val();
+        var fileInputs = [
+            document.getElementById('devant_vehicule1'),
+            document.getElementById('derriere_vehicule1'),
+            document.getElementById('gauche_vehicule1'),
+            document.getElementById('droite_vehicule1'),
+            document.getElementById('interieur_vehicule1')
+            // Add more file input elements as needed
+            ];
+            
+            var fileInputsToProcess = [];
+
+            // Parcourir tous les éléments dans fileInputs
+            for (var i = 0; i < fileInputs.length; i++) {
+                var fileInput = fileInputs[i];
+                
+                // Vérifier si le champ contient des fichiers
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                    fileInputsToProcess.push(fileInput); // Ajouter à fileInputsToProcess si des fichiers sont présents
+                }
+            }
+           
+            for (var i = 0; i < fileInputsToProcess.length; i++) {
+                
+                var fileInput = fileInputsToProcess[i];
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                     var filesList = fileInput.files;
+                // Append each file to the FormData with a unique key (e.g., 'file1', 'file2', etc.)
+                    for (var j = 0; j < filesList.length; j++) {
+                        var file = filesList[j];
+                        const resizedFile = await resizeImage(file);
+                        files.append(fileInput.name, resizedFile);
+                        // resizeImage(file).then(resizedFile => {
+                        //     console.log(resizedFile);
+                        //     files.append(fileInput.name, resizedFile);
+                        // }).catch(error => {
+                        //     console.error('Erreur lors du redimensionnement de l\'image:', error);
+                        //     files.append(fileInput.name, file);
+                        // });
+                       
+                    }
+                 
+                }
+             }
+
+            plaque=$('#vehicle').val();
+           
+            files.append('plaque',plaque);
+            files.append('recencement_file_vehic',recencement_file_vehic)
+           for (var pair of files.entries()) {
+                if (pair[1] instanceof File) {
+                        console.log(pair[0], pair[1].name); // Si c'est un fichier, affiche son nom
+                    } else {
+                        console.log(pair[0], pair[1]); // Si ce n'est pas un fichier, affiche la valeur brute
+                    }
+// Affiche la clé (name) et le nom du fichier
+            }
+            
+         
+        document.getElementById('loadingOverlayvehic_store').style.display = 'flex';
+        // for (var pair of files.entries()) {
+        //     console.log(pair[0] + ': ' + pair[1].name || pair[1]); // Affiche la clé et la valeur
+        // }
+        $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+            $('#spinnvehicule').hide();
+            alert("Envoi de données avec succes!")
+            document.getElementById('loadingOverlayvehic_store').style.display = 'none';
+          if(response=="Gallerie envoyéé avec succès!"){
+            // setTimeout(showSuccessMessageAndReload(response,'Gallery'), 3000);
+            derriere_vehicule.src = '';
+            gauche_vehicule.src = '';
+            droite_vehicule.src = '';
+            interieur_vehicule.src = '';
+        
+            document.getElementById('devant_vehicule1').value = '';
+            document.getElementById('interieur_vehicule1').value = '';
+            document.getElementById('droite_vehicule1').value = '';
+            document.getElementById('gauche_vehicule1').value = '';
+           
+            document.getElementById('gauche_vehicule1').value = '';
+            document.getElementById('derriere_vehicule1').value = '';
+         
+          }
+          
+        },
+        error: function (err) {
+            console.log(err);
+            alert("Erreur pour  l'Envoi de données!")
+            document.getElementById('loadingOverlayvehic_store').style.display = 'none';
+        }
+    });
+    }
+   // Fonction pour redimensionner une image
+// Fonction pour redimensionner une image
+function resizeImage(file, maxWidth = 500, maxHeight = 500) {
+    return new Promise((resolve, reject) => {
+        var reader = new FileReader();
+        console.log(`Taille de l'image avant redimensionnement: ${file.size} octets`);
+        reader.onload = function(e) {
+            const img = new Image();
+            img.src = e.target.result;
+
+            img.onload = function() {
+                let width = img.width;
+                let height = img.height;
+
+                // Maintenir le ratio d'aspect
+                if (width > height) {
+                    if (width > maxWidth) {
+                        height *= maxWidth / width;
+                        width = maxWidth;
+                    }
+                } else {
+                    if (height > maxHeight) {
+                        width *= maxHeight / height;
+                        height = maxHeight;
+                    }
+                }
+
+                // Créer un canvas pour redimensionner l'image
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                canvas.width = width;
+                canvas.height = height;
+                ctx.drawImage(img, 0, 0, width, height);
+
+                // Convertir l'image redimensionnée en données Base64 (JPEG)
+                const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.7); // 0.7 est la qualité (ajustable)
+                
+                // Convertir le DataURL en Blob
+                const byteString = atob(compressedDataUrl.split(',')[1]);
+                const ab = new ArrayBuffer(byteString.length);
+                const ia = new Uint8Array(ab);
+
+                for (let i = 0; i < byteString.length; i++) {
+                    ia[i] = byteString.charCodeAt(i);
+                }
+                
+                const compressedBlob = new Blob([ab], { type: 'image/jpeg' });
+                const resizedFile = new File([compressedBlob], file.name, { type: 'image/jpeg' });
+                console.log(`Taille de l'image après redimensionnement: ${resizedFile.size} octets`);
+                resolve(resizedFile); // Résoudre la promesse avec le fichier redimensionné
+            };
+
+            img.onerror = function() {
+                reject(new Error('Erreur lors du redimensionnement de l\'image.'));
+            };
+        };
+
+        reader.onerror = function() {
+            reject(new Error('Erreur lors de la lecture de l\'image.'));
+        };
+
+        reader.readAsDataURL(file); // Lire le fichier en tant qu'URL de données
+    });
+}
+ async function send_paper(){
+    let files = new FormData(), // you can consider this as 'data bag'
+       url = '/sendFilePaperVehicule';
+       const assurance = document.getElementById('assurance');
+       const assurance_v1 = document.getElementById('assurance_v1');
+       
+        const carte_grise_recto = document.getElementById('carte_grise_recto');
+        const carte_grise_verso = document.getElementById('carte_grise_verso');
+        const licence = document.getElementById('licence');
+        const licence_v1 = document.getElementById('licence_v1');
+        const nifsta_r1 = document.getElementById('nifsta_r1');
+        const nifsta_v1 = document.getElementById('nifsta_v1');
+        const visite_technique = document.getElementById('visite_technique');
+        
+       var fileInputs = [
+           document.getElementById('assurance1'),
+           document.getElementById('carte_grise_recto1'),
+           document.getElementById('carte_grise_verso1'),
+           document.getElementById('licence1'),
+           document.getElementById('licence_v1'),
+           document.getElementById('nifsta_r1'),
+           document.getElementById('nifsta_v1'),
+           document.getElementById('assurance_v1'),
+           document.getElementById('visite_technique1')
+           
+           // Add more file input elements as needed
+           ];
+           var fileInputsToProcess = [];
+
+            // Parcourir tous les éléments dans fileInputs
+            for (var i = 0; i < fileInputs.length; i++) {
+                var fileInput = fileInputs[i];
+                
+                // Vérifier si le champ contient des fichiers
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                    fileInputsToProcess.push(fileInput); // Ajouter à fileInputsToProcess si des fichiers sont présents
+                }
+            }
+
+           for (var i = 0; i < fileInputsToProcess.length; i++) {
+               
+               var fileInput = fileInputsToProcess[i];
+               if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                    var filesList = fileInput.files;
+                
+               // Append each file to the FormData with a unique key (e.g., 'file1', 'file2', etc.)
+               for (var j = 0; j < filesList.length; j++) {
+                   var file = filesList[j];
+                //    const resizedFile = await resizeImage(file);
+                //    files.append(fileInput.name, resizedFile);
+                   files.append(fileInput.name, file);
+               }
+               }
+            }
+       cooperative=$('#cooperative_check').val();
+       
+       document.getElementById('loadingOverlaypaper').style.display = 'flex';
+       plaque=$('#bus').val();
+       files.append('plaque',plaque);
+       $.ajax({
+       type: 'POST',
+       url: url,
+       processData: false,
+       contentType: false,
+       data: files,
+       success: function (response) {
+        //   console.log(response)
+        $('#spinnpaper').hide();
+        alert('Insertion des fichier avec succes!');
+        document.getElementById('loadingOverlaypaper').style.display = 'none';
+        assurance.src = '';
+        carte_grise_verso.src = '';
+        carte_grise_recto.src = '';
+        visite_technique.src = '';
+        assurance_v1.src = ''; nifsta_r1.src = ''; nifsta_v1.src = ''; licence_v1.src = '';
+        licence.src = '';
+        document.getElementById('assurance1').value = '';
+        document.getElementById('assurance_v1').value = '';
+        document.getElementById('carte_grise_recto1').value = '';
+            document.getElementById('carte_grise_verso1').value = '';
+            document.getElementById('licence1').value = '';
+             document.getElementById('visite_technique1').value = '';
+             document.getElementById('licence_v1').value = '';
+           document.getElementById('nifsta_r1').value = '';
+           document.getElementById('nifsta_v1').value = '';
+           
+         
+        //  if(response=="Papier véhicule envoyé avec succès!"){
+        //     setTimeout(showSuccessMessageAndReload(response,'Papier'), 3000);
+         
+        //  }
+       },
+       error: function (err) {
+           console.log(err);
+           alert('Une Erreur s\'est produite!');
+           document.getElementById('loadingOverlaypaper').style.display = 'none';
+       }
+   });
+ }  
+ 
+ window.onload = function() {
+      // Définir la valeur à vérifier (OK ou KO)
+      var interieur = "{{ell_int}}"; // Vous pouvez changer la valeur ici à 'KO' ou 'OK' selon le besoin
+      var exterieur = "{{ell_ext}}"; // Vous pouvez changer la valeur ici à 'KO' ou 'OK' selon le besoin
+      //interieur_vehicule droite_vehicule gauche_vehicule derriere_vehicule
+      
+        document.querySelectorAll("img").forEach(img => {
+        if (img.src && img.src.trim() !== "") {
+            img.style.display = "block";
+        }
+       
+    });
+//ell_int_ok ell_ext_ko / ell_int_ok ell_int_ko
+      // Cocher le bouton radio en fonction de la valeur
+      if (interieur === 'OK') {
+        document.getElementById('ell_int_ok').checked = true;
+        document.getElementById('ell_int_ko').checked = false;
+      }else if (interieur === 'KO'){
+        document.getElementById('ell_int_ok').checked = false;
+        document.getElementById('ell_int_ko').checked = true;
+      } 
+       if (exterieur === 'OK') {
+        document.getElementById('ell_ext_ok').checked = true;
+        document.getElementById('ell_ext_ko').checked = false;
+      }else if(exterieur==="KO"){
+        document.getElementById('ell_ext_ok').checked = false;
+        document.getElementById('ell_ext_ko').checked = true;
+      }
+      else{
+        document.getElementById('ell_ext_ok').checked = false;
+        document.getElementById('ell_ext_ko').checked = false;
+        document.getElementById('ell_int_ok').checked = false;
+        document.getElementById('ell_int_ko').checked = false;
+      }
+    };
+   
+ 
+  var dataArray = {{ record | tojson | safe }};;
+  console.log(dataArray);
+  $(document).ready(function() {
+    // Initialisation du Combogrid
+    $('#combogrid').combogrid({
+      panelWidth: 400,
+      idField: 'ligne_variance_id',
+      textField: 'ligne',
+      data: dataArray,  // Utilisation des données locales
+      columns: [[
+        {field:'ligne',title:'Ligne',width:150},
+        {field:'description',title:'Description',width:200}
+      ]],
+      fitColumns: true,
+
+      // Personnalisation de la recherche
+      onChange: function(newValue, oldValue) {
+        
+        // Filtrer les données en fonction de la recherche de l'utilisateur
+        var results = dataArray.filter(function(item) {
+          return item.name.toLowerCase().includes(newValue.toLowerCase());
+        });
+
+        // Si aucun résultat trouvé, on vide la liste
+        if (results.length === 0) {
+          // Vider les données du combogrid (afficher une liste vide)
+          $('#combogrid').combogrid('grid').datagrid('loadData', []);
+        } else {
+          // Charger les résultats filtrés dans le combogrid
+          $('#combogrid').combogrid('grid').datagrid('loadData', results);
+        }
+      }
+    });
+    var defaultId = "{{ligne_variance_id}}"
+  $('#combogrid').combogrid('setValue', defaultId);
+  });
+  
+//   $(document).ready(function() {
+//     // Au changement de la sélection du <select> "publicite"
+//     $('#publicite').change(function() {
+//         var selectedValue = $(this).val();
+        
+//         // Si l'option "SP" (Sans Publicité) est sélectionnée
+//         if (selectedValue === 'SP') {
+//             $('#publicite_section').show();  // Affiche la section
+//             $('#publicite_section_ap').hide();  // Affiche la section
+//         } else if(selectedValue === 'AP'){
+//             $('#publicite_section_ap').show();  
+//             $('#publicite_section').hide();// Masque la section
+//         }else{
+//                  $('#publicite_section_ap').hide();  
+//             $('#publicite_section').hide();// Masque la section
+//         }
+//     });
+// });
+$(document).ready(function() {
+    var haspublicite = '{{haspublicite}}'; // 👈 Change this to 'SP' or 'AP' dynamically
+    var annonceur = '{{annonceur}}'; // or fetch this dynamically
+
+    if (annonceur === 'CPP' || annonceur === 'Other' || annonceur === '') {
+      $('#annonceur').val(annonceur);
+    }
+    // ⏩ Apply the default selection if haspublicite is SP or AP
+    if (haspublicite === 'SP' || haspublicite === 'AP') {
+      $('#publicite').val(haspublicite);  // Set the value
+      // Manually trigger the change event to display the correct section
+      if (haspublicite === 'SP') {
+        $('#publicite_section').show();
+        $('#publicite_section_ap').hide();
+      } else if (haspublicite === 'AP') {
+        $('#publicite_section_ap').show();
+        $('#publicite_section').hide();
+      }
+    }
+
+    // ⏬ Section toggle on select change
+    $('#publicite').change(function() {
+      var selectedValue = $(this).val();
+
+      if (selectedValue === 'SP') {
+        $('#publicite_section').show();
+        $('#publicite_section_ap').hide();
+      } else if (selectedValue === 'AP') {
+        $('#publicite_section_ap').show();
+        $('#publicite_section').hide();
+      } else {
+        $('#publicite_section_ap').hide();
+        $('#publicite_section').hide();
+      }
+    });
+  });
+    </script>
+</body>
+</html>

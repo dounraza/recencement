@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+{% block title %} CPP-SYSTEM | EXTRACT DATA {% endblock %}
+
+{% block content %}
+<style>
+    @import url(https://unpkg.com/@webpixels/css/dist/index.css);
+</style>
+<body>
+    <div class="table-responsive">
+        <table class="table table-hover table-nowrap">
+          <thead class="table-light">
+            <tr>
+              <th scope="col">Serveur</th>
+              <th scope="col">Ip</th>
+              <th scope="col">Service</th>
+              <th scope="col">Environnement</th>
+             
+              <th scope="col">Status</th>
+              <th scope="col">Company</th>
+              <th scope="col">Action</th>
+           
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                
+              <td data-label="Serveur">
+                <img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                <a class="text-heading font-semibold" href="#">
+                  Parse
+                </a>
+              </td>
+              <td data-label="Ip">
+                <span>http://172.16.1.2</span>
+              </td>
+              <td data-label="Service">
+                <select  id="parse2" id="parse2">
+                    <option class="text-current" value="TRP">Transport</option>
+                    <option class="text-current" value="PAY">Pay</option>
+                    <option class="text-current" value="PUB">Publicité</option>
+                    <option class="text-current" value="CORE">Core</option>
+                  </select> 
+              </td>
+              <td data-label="Environnement">
+               
+                <select  id="parse2" id="parse2">
+                    <option class="text-current" value="uat">Uat</option>
+                    <option class="text-current" value="staging">Staging</option>
+                    <option class="text-current" value="prod">Prod</option>
+                  </select> 
+              </td>
+              <td data-label="Company">
+                <!-- <span class="badge bg-soft-default text-default"></span>
+                <i class="fa fa-info-circle"></i> à tester -->
+                <span class="parse1 badge bg-soft-default text-danger"><i class="fa fa-info-circle"></i> à tester</span>
+             
+              </td>
+              <td data-label="">
+                <a class="text-current" href="#">CPP-SYSTEM</a>
+              </td>
+             
+              <td>
+                <button class="btn btn-xs btn-warning">check</button>
+              </td>
+            </tr>
+            <tr>
+                <td data-label="">
+                  <img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                  <a class="text-heading font-semibold" href="#">
+                    Seafile
+                  </a>
+                </td>
+                <td data-label="Email">
+                  <span>http://qafile.cpp-system.com</span>
+                </td>
+                <td data-label="Service">
+                    <select  id="parse2" id="parse2">
+                        <option class="text-current" value="TRP">Transport</option>
+                        <option class="text-current" value="PAY">Pay</option>
+                        <option class="text-current" value="PUB">Publicité</option>
+                        <option class="text-current" value="CORE">Core</option>
+                      </select> 
+                  </td>
+                <td data-label="Lead Score">
+                  <!-- <a class="text-current" >Uat</a> -->
+                  <select  id="seafile2" id="seafile2">
+                    <option class="text-current" value="uat">Uat</option>
+                    <option class="text-current" value="staging">Staging</option>
+                    <option class="text-current" value="prod">Prod</option>
+                  </select>
+                  
+                </td>
+                <td data-label="Company">
+                  <span class="seafile1 badge bg-soft-default text-danger"><i class="fa fa-info-circle"></i> à tester</span>
+                  
+                </td>
+                <td data-label="">
+                  <a class="text-current" href="#">CPP-SYSTEM</a>
+                </td>
+               
+                <td>
+                  <button class="seafile btn btn-xs btn-warning" onclick="myFunction()">check</button>
+                </td>
+              </tr>
+              <tr>
+                
+                <td data-label="">
+                  <img alt="..." src="https://images.unsplash.com/photo-1502823403499-6ccfcf4fb453?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=3&w=256&h=256&q=80" class="avatar avatar-sm rounded-circle me-2">
+                  <a class="text-heading font-semibold" href="#">
+                         Mysql
+                  </a>
+                </td>
+                <td data-label="Email">
+                  <span>http://127.0.0.1</span>
+                </td>
+                <td data-label="Service">
+                    <select  id="parse2" id="parse2">
+                        <option class="text-current" value="TRP">Transport</option>
+                        <option class="text-current" value="PAY">Pay</option>
+                        <option class="text-current" value="PUB">Publicité</option>
+                        <option class="text-current" value="CORE">Core</option>
+                      </select> 
+                  </td>
+                <td data-label="Lead Score">
+                 
+                  <select  id="parse2" id="parse2">
+                      <option class="text-current" value="uat">Uat</option>
+                      <option class="text-current" value="staging">Staging</option>
+                      <option class="text-current" value="prod">Prod</option>
+                    </select> 
+                </td>
+                <td data-label="Company">
+                  <!-- <span class="badge bg-soft-success text-success">10/10</span> -->
+                  <span class="mysql1 badge bg-soft-default text-danger"><i class="fa fa-info-circle"></i> à tester</span>
+             
+                </td>
+                <td data-label="">
+                  <a class="text-current" href="#">CPP-SYSTEM</a>
+                </td>
+               
+                <td>
+                  <button class="btn btn-xs btn-warning">check</button>
+                </td>
+              </tr>
+          
+          </tbody>
+        </table>
+      </div>
+      <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+      <script>
+        function myFunction() {
+        //  $("#extraire").text("Extraction en cours ...");
+         var df= $(".ipo").val(); 
+         var dd= $(".envt").val(); 
+         checkserveur(dd,df);
+       }
+       
+     
+       function  checkserveur(dd,df)
+       {
+         uri="/checking";
+             $.ajax({
+               type: 'GET',
+               url:uri,
+               async: true,
+               data: {'env':dd,'ip':df},
+               datatype:"html",
+               success: function(text) {
+                //  $('#js-text').removeClass('hidden');
+                //  $('#js-text').val(text);
+                //  $("#extraire").text("Extraire");
+             
+                    if(text=='success') {
+                      
+                        $('.seafile1').removeClass('bg-soft-default');
+                        $('.seafile1').removeClass('text-warning');
+                        $('.seafile1').addClass('bg-soft-success text-success');
+                        $('.seafile1').text('Good');
+                    }
+                    if(text=='failed') {
+                      $('.seafile1').removeClass('bg-soft-default');
+                        $('.seafile1').removeClass('text-warning');
+                        $('.seafile1').addClass('bg-soft-danger text-danger');
+                        $('.seafile1').text('Lost');
+                    }
+               },
+     
+               error: function(e) {
+                 console.log(e);
+                //  $("#extraire").text("Extraire");
+               }
+     
+             });
+       }
+     </script>
+     {% endblock %}

@@ -1,0 +1,780 @@
+{% extends "base.html" %}
+{% block title %} CPP-SYSTEM | EXTRACT DATA 
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+integrity="sha384-KyZXEAg3QhqLMpG8r+dfRk3/c9KYJzGB6b6Btv8H5ZWvbGd1pJC7nj/obG2SNwAp"
+crossorigin="anonymous">
+{% endblock %}
+
+{% block content %}
+<style> 
+  @import url(https://fonts.googleapis.com/css?family=Montserrat);
+  #msform {
+    text-align: center;
+    position: relative;
+    margin-top: 30px;
+}
+/* CSS to disable scrolling on the body */
+body.no-scroll {
+    overflow: hidden;
+}
+
+#msform fieldset {
+    background: white;
+    border: 0 none;
+    border-radius: 8px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
+    box-sizing: border-box;
+    width: 133%;
+    margin: 0 10%;
+
+    /*stacking fieldsets above each other*/
+    position: relative;
+}
+
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+    display: none;
+}
+
+/*inputs*/
+#msform input, #msform textarea {
+    padding: 15px;
+    border: 1px solid #cbcfc9;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: montserrat;
+    color: #2C3E50;
+    font-size: 13px;
+}
+
+#msform input:focus, #msform textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid #2098ce;
+    outline-width: 0;
+    transition: All 0.5s ease-in;
+    -webkit-transition: All 0.5s ease-in;
+    -moz-transition: All 0.5s ease-in;
+    -o-transition: All 0.5s ease-in;
+}
+
+/*buttons*/
+#msform .action-button {
+    width: 100px;
+    background: #2098ce;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+    margin-top: 1%;
+}
+#msform #check {
+    width: 100px;
+    background: #51ce20;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+#msform #nextrecensement{
+    width: 100px;
+    background: #e1040c;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform #terminer_vehicule {
+    width: 100px;
+    background: #e1040c;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+#msform #terminer_paper {
+    width: 100px;
+    background: #e1040c;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+#msform #Pointage {
+    width: 100px;
+    background: #130418;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform .action-button:hover, #msform .action-button:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #2098ce;
+}
+
+#msform .action-button-previous {
+    width: 100px;
+    background: #aCbEd0;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform .action-button-previous:hover, #msform .action-button-previous:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #aCbEd0;
+}
+
+/*headings*/
+.fs-title {
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #2C3E50;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.fs-subtitle {
+    font-weight: normal;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/*progressbar*/
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    width: 161%;
+    /*CSS counters to number the steps*/
+    counter-reset: step;
+}
+
+#progressbar li {
+    list-style-type: none;
+    color: #666;
+    text-transform: uppercase;
+    font-size: 9px;
+    width: 33.33%;
+    float: left;
+    position: relative;
+    letter-spacing: 1px;
+}
+
+#progressbar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 24px;
+    height: 24px;
+    line-height: 26px;
+    display: block;
+    font-size: 12px;
+    color: #333;
+    background: white;
+    border-radius: 25px;
+    margin: 0 auto 10px auto;
+}
+
+/*progressbar connectors*/
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: white;
+    position: absolute;
+    left: -50%;
+    top: 9px;
+    z-index: -1; /*put it behind the numbers*/
+}
+
+#progressbar li:first-child:after {
+    /*connector not needed before the first step*/
+    content: none;
+}
+
+/*marking active/completed steps blue*/
+/*The number of the step and the connector before it = blue*/
+#progressbar li.active:before, #progressbar li.active:after {
+    background: #2098ce;
+    color: white;
+}
+  </style>
+  <div class="container mt-5">
+    <!-- Exemple d'alerte Bootstrap 5 -->
+    <div class="alert alert-primary" role="alert" id="customAlert" style="display: none;">
+      Action effectué avec succès!
+    </div>
+  </div>
+ <div class="row">
+    <div class="col-md-6 col-md-offset-3">
+       
+        <form id="msform">
+            
+            <div class="pull-left"><a href="{{url_for('dashboard')}}" class="btn btn-xs btn-dark mt-5"> <i class="fa fa-home"></i> Home </a>&nbsp </div>
+            <!-- <div class="pull-left"><a href="{{url_for('listeViewVehicule')}}" class="btn btn-xs btn-dark mt-5"> <i class="fa fa-arrow-left"></i> Pointage liste</a></div>
+           -->
+            <!-- progressbar -->
+            <ul id="progressbar" >
+                <li class="active">Ajout de vehicule</li>
+                
+
+            </ul>
+            <!-- fieldsets -->
+             <div class="container">
+                {% include 'steps/included/store_vehicule.html' %}
+              
+            </div>
+            </form>
+        
+    </div>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+<script>
+function showdomchauffeur(moncheckbox){
+     
+  if(moncheckbox.checked){
+    if(moncheckbox.value==="chauffeur"){
+        document.getElementById('receveur').checked = false; 
+        document.getElementById('proprietaire').checked = false; 
+        $('#chauffeurForm').show();
+        $('#receveurForm').hide();
+        $('#proprietaireForm').hide();
+    }
+    if(moncheckbox.value==="receveur"){
+        document.getElementById('chauffeur').checked = false; 
+        document.getElementById('proprietaire').checked = false; 
+        $('#chauffeurForm').hide();
+        $('#receveurForm').show();
+        $('#proprietaireForm').hide();
+    }
+    if(moncheckbox.value==="proprietaire"){
+        document.getElementById('chauffeur').checked = false; 
+        document.getElementById('receveur').checked = false; 
+        $('#chauffeurForm').hide();
+        $('#receveurForm').hide();
+        $('#proprietaireForm').show();
+    }
+    $('#vals').val(moncheckbox.value);
+  }
+  else{
+    if(moncheckbox.value==="chauffeur"){
+        $('#chauffeurForm').hide();
+        $('#receveurForm').hide();
+        $('#proprietaireForm').hide();
+    }
+    if(moncheckbox.value==="receveur"){
+        $('#chauffeurForm').hide();
+        $('#receveurForm').hide();
+        $('#proprietaireForm').hide();
+    }
+    if(moncheckbox.value==="proprietaire"){
+        $('#chauffeurForm').hide();
+        $('#receveurForm').hide();
+        $('#proprietaireForm').hide();
+    }
+    //le code qui le cache
+    $('#vals').val('');
+  }
+}
+    const customAlert = document.getElementById('customAlert');
+
+// Appliquer des styles personnalisés à l'alerte
+    customAlert.style.backgroundColor = '#20ce20';
+    customAlert.style.borderColor = '#20ce20';
+    customAlert.style.color = '#FFF';
+    customAlert.style.fontSize = '20px';
+    customAlert.style.fontWeight = 'bold';
+    customAlert.style.textAlign = 'center';
+    function cacherAlerte() {
+                customAlert.style.display = 'none';
+    }
+    function showSuccessMessageAndReload(param,type) {
+            // Show the success message
+         $('#customAlert').show();
+         setTimeout(cacherAlerte, 15000);
+        
+     }
+    $( "#terminer" ).on( "click", function(){
+        $('#spinnteam').show();
+        var role=$('#vals').val();
+        nom="#";
+        prenom="#";
+        tel="#"
+        if(role==="chauffeur"){
+            nom=$('#nom_chauffeur').val();
+            prenom=$('#prenom_chauffeur').val();
+            tel=$('#tel_chauffeur').val();
+        }
+        if(role==="receveur"){
+            nom=$('#nom_receveur').val();
+            prenom=$('#prenom_receveur').val();
+            tel=$('#tel_receveur').val();
+        }
+           
+        if(role==="proprietaire"){
+            nom=$('#nom_prop').val();
+            prenom=$('#prenom_prop').val();
+            tel=$('#tel_prop').val();
+        }
+        let files = new FormData(), // you can consider this as 'data bag'
+        url = 'sendTeamVehicule';
+        const photo_c = document.getElementById('photo_ch');
+        const photo_r = document.getElementById('photo_rc');
+        const photo_p = document.getElementById('photo_pr');
+        const cin_g = document.getElementById('cin_g');
+        const cin_r_g = document.getElementById('cin_r_g');
+        const cin_v = document.getElementById('cin_v');
+        const cin_r_v = document.getElementById('cin_r_v');
+        const permis_v = document.getElementById('permis_v');
+        const permis_r_v = document.getElementById('permis_r_v');
+        const permis_g = document.getElementById('permis_g');
+        const permis_r_g = document.getElementById('permis_r_g');
+
+
+
+
+    var fileInputs = [
+            document.getElementById('cin_recto1'),
+            document.getElementById('photo_ch1'),
+            document.getElementById('photo_rc1'),
+            document.getElementById('photo_pr1'),
+            document.getElementById('cin_verso1'),
+            document.getElementById('permis_verso1'),
+            document.getElementById('permis_recto1'),
+
+            document.getElementById('cin_r_recto1'),
+            document.getElementById('cin_r_verso1'),
+            document.getElementById('permis_r_recto1'),
+            document.getElementById('permis_r_verso1')
+            // Add more file input elements as needed
+            ];
+            for (var i = 0; i < fileInputs.length; i++) {
+                
+                var fileInput = fileInputs[i];
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                     var filesList = fileInput.files;
+                 
+                // Append each file to the FormData with a unique key (e.g., 'file1', 'file2', etc.)
+                for (var j = 0; j < filesList.length; j++) {
+                    var file = filesList[j];
+                    files.append(fileInput.name, file);
+                }
+                }
+             }
+        
+        plaque=$('#plaque_im').val();
+        userid=$('#userid').val();
+        username=$('#username').val();
+        files.append('userid',userid);
+        files.append('username',username);
+        files.append('role',role);
+        files.append('nom',nom);
+        files.append('prenom',prenom);
+        files.append('tel',tel);
+        files.append('plaque',plaque);
+      
+        $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+            $('#spinnteam').hide();
+            setTimeout(showSuccessMessageAndReload(response,'Preposé'), 3000);
+           
+            // setTimeout(showSuccessMessageAndReload(response,'Preposé'), 3000);
+            cin_g.src = '';
+            cin_r_g.src = '';
+            cin_v.src = '';
+            cin_r_v.src = '';
+            permis_v.src = '';
+            permis_r_v.src = '';
+            permis_g.src = '';
+            permis_r_g.src = '';
+            photo_c.src="";
+            photo_r.src="";
+            photo_p.src="";
+            document.getElementById('cin_recto1').value = '';
+            document.getElementById('cin_verso1').value = '';
+            document.getElementById('permis_verso1').value = '';
+            document.getElementById('permis_recto1').value = '';
+
+            document.getElementById('cin_r_recto1').value = '';
+            document.getElementById('cin_r_verso1').value = '';
+            document.getElementById('permis_r_recto1').value = '';
+            document.getElementById('permis_r_verso1').value = '';
+
+            document.getElementById('cin_p_recto1').value = '';
+            document.getElementById('cin_p_verso1').value = '';
+        
+           
+          
+        },
+        error: function (err) {
+            console.log(err);
+
+        }
+    });
+    });
+    // $( "#Pointage" ).on( "click", function() {
+      
+    //     // setTimeout(showSuccessMessageAndReload("Pointage effectué",'Pointage'), 3000);
+    // });
+    $( "#save_vehicule" ).on( "click", function() {
+        var x = document.getElementById("data_response").value;
+        cooperative=$('#cooperative').val();
+        plaque=$('#plaque_im').val();
+        marque=$('#marque').val();
+        nb_place=$('#nbplc_vehic').val();
+        userid=$('#userid').val();
+        username=$('#username').val();
+        let files = new FormData(), // you can consider this as 'data bag'
+
+        url = 'send_vehicule';
+        files.append('data_json',x);
+        files.append('cooperative',cooperative);
+        files.append('plaque_im',plaque);
+        files.append('marque',marque);
+        files.append('nbplc_vehic',28);
+        files.append('userid',userid);
+        files.append('username',username);
+        $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+           console.log(response);
+           setTimeout(showSuccessMessageAndReload("Pointage effectué",'Pointage'), 3000);
+           setTimeout(function () {
+                location.reload();
+                }, 2000);
+           
+        //    setTimeout(location.reload(), 8000);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+    });
+    $( "#terminer_vehicule" ).on( "click", function() {
+        $('#spinnvehicule').show();
+        let files = new FormData(), // you can consider this as 'data bag'
+        url = 'sendFileVehicule';
+        
+        const devant_vehicule = document.getElementById('devant_vehicule');
+        const derriere_vehicule = document.getElementById('derriere_vehicule');
+        const gauche_vehicule = document.getElementById('gauche_vehicule');
+        const droite_vehicule = document.getElementById('droite_vehicule');
+        const interieur_vehicule = document.getElementById('interieur_vehicule');
+        
+        var fileInputs = [
+            document.getElementById('devant_vehicule1'),
+            document.getElementById('derriere_vehicule1'),
+            document.getElementById('gauche_vehicule1'),
+            document.getElementById('droite_vehicule1'),
+            document.getElementById('interieur_vehicule1')
+            // Add more file input elements as needed
+            ];
+            for (var i = 0; i < fileInputs.length; i++) {
+                
+                var fileInput = fileInputs[i];
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                     var filesList = fileInput.files;
+                 
+                // Append each file to the FormData with a unique key (e.g., 'file1', 'file2', etc.)
+                for (var j = 0; j < filesList.length; j++) {
+                    var file = filesList[j];
+                    files.append(fileInput.name, file);
+                }
+                }
+             }
+        plaque=$('#plaque').val();
+        files.append('plaque',plaque);
+        $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+            $('#spinnvehicule').hide();
+          if(response=="Gallerie envoyéé avec succès!"){
+            setTimeout(showSuccessMessageAndReload(response,'Gallery'), 3000);
+            derriere_vehicule.src = '';
+            gauche_vehicule.src = '';
+            droite_vehicule.src = '';
+            interieur_vehicule.src = '';
+        
+            document.getElementById('devant_vehicule1').value = '';
+            document.getElementById('interieur_vehicule1').value = '';
+            document.getElementById('droite_vehicule1').value = '';
+            document.getElementById('gauche_vehicule1').value = '';
+           
+            document.getElementById('gauche_vehicule1').value = '';
+            document.getElementById('derriere_vehicule1').value = '';
+         
+          }
+          
+        },
+        error: function (err) {
+            console.log(err);
+          
+        }
+    });
+    }); 
+      
+    $( "#terminer_paper" ).on( "click", function() {
+        $('#spinnpaper').show();
+        const assurance = document.getElementById('assurance');
+        const phrect = document.getElementById('carte_grise_g');
+        const phvers = document.getElementById('carte_grise_v');
+        const lic = document.getElementById('licence');
+        const vt = document.getElementById('visite_technique');
+        
+       let files = new FormData(), // you can consider this as 'data bag'
+       url = 'sendFilePaperVehicule';
+      
+        
+       var fileInputs = [
+           document.getElementById('assurance1'),
+           document.getElementById('carte_grise_recto1'),
+           document.getElementById('carte_grise_verso1'),
+           document.getElementById('licence1'),
+           document.getElementById('visite_technique1'),
+
+           // Add more file input elements as needed
+           ];
+           for (var i = 0; i < fileInputs.length; i++) {
+               
+               var fileInput = fileInputs[i];
+               if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                    var filesList = fileInput.files;
+                
+               // Append each file to the FormData with a unique key (e.g., 'file1', 'file2', etc.)
+               for (var j = 0; j < filesList.length; j++) {
+                   var file = filesList[j];
+                   files.append(fileInput.name, file);
+               }
+               }
+            }
+    
+       plaque=$('#plaque').val();
+       files.append('plaque',plaque);
+       $.ajax({
+       type: 'POST',
+       url: url,
+       processData: false,
+       contentType: false,
+       data: files,
+       success: function (response) {
+        //   console.log(response)
+        $('#spinnpaper').hide();
+        assurance.src = '';
+        phrect.src = '';
+        phvers.src = '';
+        vt.src = '';
+         lic.src = '';
+        document.getElementById('assurance1').value = '';
+        document.getElementById('carte_grise_recto1').value = '';
+        document.getElementById('carte_grise_verso1').value = '';
+        document.getElementById('licence1').value = '';
+        document.getElementById('visite_technique1').value = '';
+             setTimeout(showSuccessMessageAndReload(response,'Papier'), 2000);
+        //  if(response=="Papier véhicule envoyé avec succès!"){
+        //     setTimeout(showSuccessMessageAndReload(response,'Papier'), 3000);
+         
+        //  }
+       },
+       error: function (err) {
+           console.log(err);
+         
+       }
+   });
+   }); 
+    
+    $( "#check" ).on( "click", function() {
+        var json_data=document.getElementById("data_response");
+        var plaque_name=document.getElementById("plaque_name");
+        
+        let files = new FormData(), // you can consider this as 'data bag'
+        url = '/reconizer';
+        
+        files.append('fichier', $('#devant_vehicule1')[0].files[0]);
+       
+    $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+            console.log(response);
+            datavalue=JSON.parse(response);
+            plaque=datavalue.plaque;
+            json_data.value +=response;
+            plaque_name.textContent =plaque;
+            $('#plaque_im').val(plaque);
+            var element =document.getElementById("action_btn");
+           
+                var check=element.style.display;
+                if(check==='none'){
+                    element.style.display = "block";
+                }else{
+                    element.style.display = "none";
+                }
+               
+        },
+        error: function (err) {
+            console.log(err);
+           
+            json_data.value +="Plaque non identifié!" ;
+        }
+    });
+    });
+$("#nextrecensement" ).on( "click", function() {
+    // $('#gallery').show();
+    var elementnext =document.getElementById("continuer");
+    
+    var elementbtn =document.getElementById("terminer_vehicule");
+    var element =document.getElementById("gallery");
+    var check=element.style.display;
+    // var checknxt=elementnext.style.display;
+    // var checkbtn=elementbtn.style.display;
+    elementnext.style.display = "block";
+    elementbtn.style.display = "block";
+    if(check==='none'){
+        element.style.display = "block";
+    }else{
+        element.style.display = "none";
+    }
+    // if(checknxt==='none'){
+    //     elementnext.style.display = "block";
+    // }else{
+    //     elementnext.style.display = "none";
+    // }
+    // if(checkbtn==='none'){
+    //     elementbtn.style.display = "block";
+    // }else{
+    //     elementbtn.style.display = "none";
+    // }
+    elementnext.style.display = "block";
+} );
+
+    
+//jQuery time
+var current_fs, next_fs, previous_fs; //fieldsets
+var left, opacity, scale; //fieldset properties which we will animate
+var animating; //flag to prevent quick multi-click glitches
+
+$(".next").click(function(){
+	if(animating) return false;
+	animating = true;
+	
+	current_fs = $(this).parent();
+	next_fs = $(this).parent().next();
+	
+	//activate next step on progressbar using the index of next_fs
+	$("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+	
+	//show the next fieldset
+	next_fs.show(); 
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+		step: function(now, mx) {
+			//as the opacity of current_fs reduces to 0 - stored in "now"
+			//1. scale current_fs down to 80%
+			scale = 1 - (1 - now) * 0.2;
+			//2. bring next_fs from the right(50%)
+			left = (now * 50)+"%";
+			//3. increase opacity of next_fs to 1 as it moves in
+			opacity = 1 - now;
+			current_fs.css({
+        'transform': 'scale('+scale+')',
+        'position': 'absolute'
+      });
+			next_fs.css({'left': left, 'opacity': opacity});
+		}, 
+		duration: 800, 
+		complete: function(){
+			current_fs.hide();
+			animating = false;
+		}, 
+		//this comes from the custom easing plugin
+		easing: 'easeInOutBack'
+	});
+});
+
+$(".previous").click(function(){
+	if(animating) return false;
+	animating = true;
+	
+	current_fs = $(this).parent();
+	previous_fs = $(this).parent().prev();
+	
+	//de-activate current step on progressbar
+	$("#progressbar li").eq($("fieldset").index(current_fs)).removeClass("active");
+	
+	//show the previous fieldset
+	previous_fs.show(); 
+	//hide the current fieldset with style
+	current_fs.animate({opacity: 0}, {
+		step: function(now, mx) {
+			//as the opacity of current_fs reduces to 0 - stored in "now"
+			//1. scale previous_fs from 80% to 100%
+			scale = 0.8 + (1 - now) * 0.2;
+			//2. take current_fs to the right(50%) - from 0%
+			left = ((1-now) * 50)+"%";
+			//3. increase opacity of previous_fs to 1 as it moves in
+			opacity = 1 - now;
+			current_fs.css({'left': left});
+			previous_fs.css({'transform': 'scale('+scale+')', 'opacity': opacity});
+		}, 
+		duration: 800, 
+		complete: function(){
+			current_fs.hide();
+			animating = false;
+		}, 
+		//this comes from the custom easing plugin
+		easing: 'easeInOutBack'
+	});
+});
+
+$(".submit").click(function(){
+	return false;
+})
+</script>
+{% endblock %}

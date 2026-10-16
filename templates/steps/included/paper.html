@@ -1,0 +1,105 @@
+<fieldset>
+  <div class="spinner-border text-danger" id="spinnpaper" role="status" style="display:none">
+    <span class="sr-only">Loading...</span>
+  </div>
+    <!-- <h2 class="fs-title">Details Papier</h2> -->
+    <h3 class="fs-subtitle">Papier  véhicules</h3>
+    <h5 class="text-primary text-center" style="font-size:22px;font-weight: bold;" ><span >CARTE GRISE</span></h5>
+    <div class="container">
+        <div class="row">
+          
+          <div class="col-md-6">
+            <div class="image-placeholder" id="imagePreview">
+            <img id="carte_grise_recto" src="{{Carte_grise_recto}}"alt="RECTO" width="100" height="100" />
+            </div><br>
+            <input type="hidden" id="bus" name="bus" value="{{bus}}"><br>
+            <input type="file" onchange="previewImage(this)" name="carte_grise_recto" id="carte_grise_recto1"  accept="image/*" capture="environment"><br>
+          </div>
+          <div class="col-md-6">
+            <div class="image-placeholder" id="imagePreview">
+            <img id="carte_grise_verso" src="{{Carte_grise_verso}}" alt="VERSO" width="100" height="100" />
+          </div><br>
+            <input type="file" onchange="previewImage(this)" name="carte_grise_verso" id="carte_grise_verso1"  accept="image/*" capture="environment"><br>
+          </div>
+        </div>
+    </div>     
+    <br>
+    <h5 class="text-primary text-center" style="font-size:22px;font-weight: bold;"><span>VISITE TECHNIQUE</span></h5>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+        <div class="image-placeholder" id="imagePreview">
+        <img id="visite_technique" src="{{visite_technique}}" alt="RECTO" width="100" height="100" />
+        </div><br>
+        <input type="file" onchange="previewImage(this)" name="visite_technique" id="visite_technique1"  accept="image/*" capture="environment"><br>
+    </div>
+    </div>
+    </div>
+        <br> 
+    <!-- <h5><span class="text-primary">Assurance</span></h5> -->
+    <h5 class="text-primary text-center" style="font-size:22px;font-weight: bold;"><span>ASSURANCE</span></h5>
+        <div class="container">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="image-placeholder" id="imagePreview">
+                <img id="assurance" src="{{Assurance}}" alt="RECTO" width="100" height="100" />
+                </div><br>
+                <input type="file" onchange="previewImage(this)" name="assurance" id="assurance1"  accept="image/*" capture="environment"><br>
+              </div>
+              <div class="col-md-6">
+                <div class="image-placeholder" id="imagePreview">
+                 <img id="assurance_v" src="{{Assurance}}" alt="VERSO" width="100" height="100" />
+                </div><br>
+                <input type="file" onchange="previewImage(this)" name="assurance_v" id="assurance_v1" accept="image/*" capture="environment"><br>
+              </div>
+            </div>
+        </div>   
+       <br>
+        <h5 class="text-primary text-center" style="font-size:22px;font-weight: bold;"><span>NIF / STAT</span></h5>
+        <div class="container">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="image-placeholder" id="imagePreview">
+                <img id="nifsta_r" src="{{nif_stat_r}}" alt="NIF/STAT" width="100" height="100" />
+              </div><br>
+                <input type="file" onchange="previewImage(this)" name="nifsta_r" id="nifsta_r1" accept="image/*" capture="environment"><br>
+              </div>
+              <div class="col-md-6">
+                <div class="image-placeholder" id="imagePreview">
+                 <img id="nifsta_v" src="{{nif_stat_v}}" alt="NIF/STAT" width="100" height="100" />
+                </div><br>
+                <input type="file" onchange="previewImage(this)" name="nifsta_v" id="nifsta_v1"  accept="image/*" capture="environment"><br>
+              </div>
+            </div>
+        </div>   
+      <br>
+      <h5 class="text-primary text-center" style="font-size:22px;font-weight: bold;"><span>LICENCE</span></h5>
+           <div class="container">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="image-placeholder" id="imagePreview">
+                <img id="licence" src="{{Licence }}" alt="RECTO" width="100" height="100" /><br>
+              </div><br>
+                <input type="file" onchange="previewImage(this)" name="licence" id="licence1" accept="image/*" capture="environment"><br>
+              </div>
+              <div class="col-md-6">
+                <div class="image-placeholder" id="imagePreview">
+                <img id="licence_v"  src="{{Licence_Verso  }}"alt="VERSO" width="100" height="100" />
+              </div><br>
+              <input type="hidden" name="recencement_paper"id="recencement_paper" value="oui">
+                <input type="file" onchange="previewImage(this)" name="licence_v" id="licence_v1" accept="image/*" capture="environment"><br>
+              </div>
+            </div>
+        </div>   
+    <!-- <a href="#" class="btn btn-danger btn-xs" id="terminer_paper">Envoyer</a><br/> -->
+     <br>
+    <a href="#" class="btn btn-danger btn-block" id="terminer_paper"onclick="send_paper()">Save Changes</a>
+    <div id="loadingOverlaypaper">
+      <div class="loading-content">
+          <h3>Chargement en cours ...</h3>
+          <i class="fa fa-spinner fa-spin fa-3x"></i>
+      </div>
+  </div>
+    <!-- <input type="button" name="previous" class="btn btn-default action-button-previous" value="Précédent"/>
+    <input type="button" name="next" class="btn btn-primary action-button" value="Continuer"/> -->
+</fieldset>

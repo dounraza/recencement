@@ -1,0 +1,276 @@
+{% extends "base.html" %}
+{% block title %}Recensement des véhicules{% endblock %}
+
+{% block content %}
+<style>
+  body { background: #f5f5f5 !important; color: #181818; font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; }
+  .container-fluid { max-width: 1440px; }
+  .rec-header { background: linear-gradient(135deg, #111 0%, #242424 65%, #b5121b 100%); color: white; border-radius: 18px; padding: 30px 34px; box-shadow: 0 10px 26px rgba(0,0,0,.2); }
+  .rec-header h1 { letter-spacing: -.02em; font-weight: 750; }
+  .rec-card { border: 1px solid #e5e5e5; border-radius: 16px; box-shadow: 0 8px 24px rgba(0,0,0,.07); overflow: hidden; background: #fff; }
+  .form-label { font-size: .78rem; font-weight: 750; color: #444; text-transform: uppercase; letter-spacing: .025em; }
+  .form-control, .form-select { border: 1px solid #d5d5d5; border-radius: 11px; padding: .78rem .9rem; color: #222; background: #fff; transition: all .2s ease; }
+  .form-control:hover, .form-select:hover { border-color: #d22a34; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(181,18,27,.08); }
+  .form-control:focus, .form-select:focus { border-color: #b5121b; outline: 0; transform: translateY(-1px); box-shadow: 0 0 0 .2rem rgba(181,18,27,.14), 0 7px 15px rgba(181,18,27,.1); }
+  .form-control::placeholder { color: #a4b2c1; }
+  input[required], select[required] { border-left: 3px solid #b5121b; }
+  input[type="file"] { padding: .52rem .65rem; cursor: pointer; background: #f8fbfe; }
+  input[type="file"]::file-selector-button { border: 0; border-radius: 7px; padding: .45rem .7rem; margin-right: .55rem; color: #fff; background: #111; font-weight: 650; cursor: pointer; }
+  textarea.form-control { min-height: 120px; resize: vertical; }
+  .form-check-input { width: 1.15em; height: 1.15em; border-color: #a9b9ca; }
+  .form-check-input:checked { background-color: #b5121b; border-color: #b5121b; }
+  .btn { border-radius: 9px; font-weight: 650; }
+  .btn-primary { background: #b5121b; border-color: #b5121b; }
+  .btn-primary:hover { background: #8d0d14; border-color: #8d0d14; }
+  .photo-preview { width: 100%; height: 190px; border: 2px dashed #cbd6e4; border-radius: 12px; object-fit: cover; background: #f8fafc; }
+  .vehicle-thumb { width: 58px; height: 45px; object-fit: cover; border-radius: 8px; }
+  .empty-photo { width: 58px; height: 45px; border-radius: 8px; background: #edf2f7; color: #9aa9bb; display:flex; align-items:center; justify-content:center; }
+  .table { margin-bottom: 0; }
+  .table thead th { color: #52627a; background: #f7f9fc; font-size: .75rem; text-transform: uppercase; letter-spacing: .04em; border-bottom: 1px solid #e0e8f1; }
+  .table > :not(caption) > * > * { padding: 13px 10px; vertical-align: middle; }
+  .table tbody tr:hover { background: #f6fbff; }
+  .wizard-step { display: none; }
+  .wizard-step.active { display: block; }
+  .wizard-progress { height: 8px; border-radius: 8px; background: #e8eef6; overflow: hidden; }
+  .wizard-progress-bar { height: 100%; width: 33.33%; background: #b5121b; transition: width .25s ease; }
+  .wizard-dots { display: flex; justify-content: space-between; color: #8a99ac; font-size: .8rem; font-weight: 600; }
+  .wizard-dots span.active { color: #b5121b; }
+  .wizard-step > .d-flex.align-items-center h2 { color: #111; font-weight: 750; }
+  .wizard-step > .d-flex.align-items-center .badge { min-width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center; background: #b5121b !important; }
+  .border.rounded-3 { border-color: #dce6ef !important; transition: all .2s ease; }
+  .border.rounded-3:hover { border-color: #d22a34 !important; box-shadow: 0 7px 18px rgba(181,18,27,.1); transform: translateY(-2px); }
+  @media (max-width: 768px) {
+    .container-fluid { padding: 12px !important; }
+    .rec-header { padding: 22px 18px; border-radius: 13px; }
+    .rec-header .btn { width: 100%; }
+    .card-body { padding: 20px !important; }
+    .wizard-dots { font-size: .7rem; }
+    .wizard-step .btn-lg { width: 100%; }
+    .table { min-width: 760px; }
+    .table-responsive { margin: 0 -4px; }
+  }
+  @media (max-width: 480px) {
+    .rec-header h1 { font-size: 1.35rem; }
+    .rec-header p { font-size: .85rem; }
+    .wizard-dots span { max-width: 30%; }
+    .photo-preview { height: 125px !important; }
+  }
+</style>
+
+<div class="container-fluid py-4">
+  <div class="rec-header mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+    <div>
+      <div class="text-uppercase small opacity-75">Gestion du parc</div>
+      <h1 class="h3 mb-1">Recensement des véhicules</h1>
+      <p class="mb-0 opacity-75">Enregistrez le véhicule, son propriétaire et sa photo.</p>
+    </div>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-light">← Tableau de bord</a>
+  </div>
+
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}{% for category, message in messages %}
+      <div class="alert alert-{{ category }} alert-dismissible fade show">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+    {% endfor %}{% endif %}
+  {% endwith %}
+
+  <div class="card rec-card mb-4">
+    <div class="card-body p-4 p-lg-5">
+      <form method="post" enctype="multipart/form-data">
+        <div class="d-flex align-items-center mb-3"><span class="badge bg-primary rounded-pill me-2">1</span><h2 class="h5 mb-0">Informations du véhicule</h2></div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-3"><label class="form-label">Capacité (places)</label><input name="capacite_places" class="form-control" type="number" min="1" max="200" placeholder="30"></div>
+          <div class="col-md-4 d-flex align-items-end pb-2"><div class="form-check"><input class="form-check-input" type="checkbox" name="a_des_publicites" id="a_des_publicites"><label class="form-check-label" for="a_des_publicites">Le véhicule comporte des publicités</label></div></div>
+          <div class="col-md-3"><label class="form-label">Plaque d’immatriculation *</label><input name="plaque" class="form-control" placeholder="1234 TAA" required></div>
+          <div class="col-md-3"><label class="form-label">Marque *</label><select name="marque" class="form-select" required><option value="">Choisir une marque</option>{% for marque in marques %}<option value="{{ marque }}">{{ marque }}</option>{% endfor %}</select></div>
+          <div class="col-md-3"><label class="form-label">Modèle</label><input name="modele" class="form-control" placeholder="Coaster"></div>
+          <div class="col-md-3"><label class="form-label">Année</label><input name="annee" class="form-control" type="number" min="1900" max="2100" placeholder="2022"></div>
+          <div class="col-md-3"><label class="form-label">Couleur</label><select name="couleur" class="form-select"><option value="">Choisir une couleur</option><option>Blanc</option><option>Noir</option><option>Bleu</option><option>Rouge</option><option>Vert</option><option>Jaune</option><option>Gris</option><option>Orange</option><option>Marron</option><option>Beige</option><option>Autre</option></select></div>
+          <div class="col-md-5"><label class="form-label">Coopérative</label><input name="cooperative" class="form-control" placeholder="Nom de la coopérative"></div>
+        </div>
+
+        <div class="d-flex align-items-center mb-3"><span class="badge bg-primary rounded-pill me-2">2</span><h2 class="h5 mb-0">Informations du propriétaire</h2></div>
+        <div class="row g-3 mb-4">
+          <div class="col-md-4"><label class="form-label">Nom complet *</label><input name="proprietaire_nom" class="form-control" placeholder="Nom et prénom(s)" required></div>
+          <div class="col-md-3"><label class="form-label">Téléphone</label><input name="proprietaire_telephone" class="form-control" type="tel" placeholder="034 00 000 00"></div>
+          <div class="col-md-3"><label class="form-label">CIN</label><input name="proprietaire_cin" class="form-control" placeholder="Numéro CIN"></div>
+          <div class="col-md-5"><label class="form-label">Adresse</label><input name="proprietaire_adresse" class="form-control" placeholder="Adresse du propriétaire"></div>
+        </div>
+
+        <div class="d-flex align-items-center mb-3"><span class="badge bg-primary rounded-pill me-2">3</span><h2 class="h5 mb-0">Photo et remarques</h2></div>
+        <div class="row g-3 mb-4">
+          {% for vue, libelle in [('devant', 'Avant'), ('derriere', 'Arrière'), ('gauche', 'Côté gauche'), ('droite', 'Côté droit'), ('interieur', 'Intérieur')] %}
+          <div class="col-6 col-md"><div class="border rounded-3 p-2 h-100 bg-light">
+            <img id="preview-{{ vue }}" class="photo-preview" style="height:120px" alt="{{ libelle }}">
+            <label class="form-label mt-2 mb-1">{{ libelle }}</label>
+            <input class="form-control form-control-sm vehicle-photo" data-preview="preview-{{ vue }}" name="image_{{ vue }}" type="file" accept="image/jpeg,image/png,image/webp">
+          </div></div>
+          {% endfor %}
+        </div>
+        <div class="row g-4 align-items-end" style="display:none">
+          <div class="col-md-4"><img id="photo-preview" class="photo-preview" alt="Aperçu de la photo"><label class="form-label mt-2">Photo du véhicule</label><input id="photo" name="image" class="form-control" type="file" accept="image/jpeg,image/png,image/webp"></div>
+          <div class="col-md-5"><label class="form-label">Remarques</label><textarea name="notes" class="form-control" rows="5" placeholder="Observations éventuelles"></textarea></div>
+          <div class="col-md-3"><button class="btn btn-primary btn-lg w-100" type="submit">Enregistrer le véhicule</button></div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card rec-card mb-3">
+    <div class="card-body p-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+      <strong>Actions de synchronisation</strong>
+      <form method="post" action="/recensement/sync-all"><button class="btn btn-dark" type="submit">↻ Synchroniser tout</button></form>
+    </div>
+    <div class="row g-2 px-3 pb-3">
+      {% for vehicule in vehicules if vehicule.sync_status != 'synced' %}
+      <div class="col-12 col-md-6 col-xl-4"><div class="d-flex justify-content-between align-items-center border rounded-3 p-2 bg-white">
+        <div><strong>{{ vehicule.plaque }}</strong><small class="d-block text-muted">{{ vehicule.sync_status }}</small></div>
+        <div class="d-flex gap-2"><a class="btn btn-sm btn-outline-dark" href="{{ url_for('voir_recensement', recensement_id=vehicule.id) }}">Voir</a><form method="post" action="{{ url_for('synchroniser_un_recensement', recensement_id=vehicule.id) }}"><button class="btn btn-sm btn-outline-danger" type="submit">↻ Sync</button></form></div>
+      </div></div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="card rec-card">
+    <div class="card-body p-4">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-3"><h2 class="h5 mb-0">Véhicules recensés <span class="badge bg-light text-primary">{{ vehicules|length }}</span></h2><form class="d-flex" method="get"><input name="q" value="{{ recherche }}" class="form-control me-2" placeholder="Rechercher..."><button class="btn btn-outline-primary">Rechercher</button></form></div>
+      <div class="table-responsive"><table class="table table-hover"><thead><tr><th>Photo</th><th>Immatriculation</th><th>Véhicule</th><th>Propriétaire</th><th>Téléphone</th><th>Coopérative</th></tr></thead><tbody>
+      {% for vehicule in vehicules %}<tr><td>{% if vehicule.image %}<img class="vehicle-thumb" src="{{ url_for('static', filename='vehicle_uploads/' ~ vehicule.image) }}">{% else %}<div class="empty-photo">—</div>{% endif %}</td><td><strong>{{ vehicule.plaque }}</strong></td><td>{{ vehicule.marque }}{% if vehicule.modele %} {{ vehicule.modele }}{% endif %}{% if vehicule.annee %}<small class="text-muted d-block">{{ vehicule.annee }}{% if vehicule.couleur %} · {{ vehicule.couleur }}{% endif %}</small>{% endif %}</td><td>{{ vehicule.proprietaire_nom }}{% if vehicule.proprietaire_cin %}<small class="text-muted d-block">CIN {{ vehicule.proprietaire_cin }}</small>{% endif %}</td><td>{{ vehicule.proprietaire_telephone or '—' }}</td><td>{{ vehicule.cooperative or '—' }}</td></tr>
+      {% else %}<tr><td colspan="6" class="text-center text-muted py-4">Aucun véhicule recensé pour le moment.</td></tr>{% endfor %}
+      </tbody></table></div>
+    </div>
+  </div>
+</div>
+<script>
+  const syncStatuses = {{ vehicules | map(attribute='sync_status') | list | tojson }};
+  const vehicleIds = {{ vehicules | map(attribute='id') | list | tojson }};
+  const ownerInput = document.querySelector('[name="proprietaire_nom"]');
+  if (ownerInput) {
+    ownerInput.removeAttribute('required');
+    const ownerLabel = ownerInput.closest('[class*="col-"]')?.querySelector('label');
+    if (ownerLabel) ownerLabel.innerHTML = 'Nom complet <span class="text-muted">(facultatif)</span>';
+    const searchBox = document.createElement('input');
+    searchBox.className = 'form-control mb-2';
+    searchBox.placeholder = 'Rechercher par téléphone...';
+    searchBox.type = 'search';
+    ownerInput.closest('[class*="col-"]').prepend(searchBox);
+    const searchButton = document.createElement('button');
+    searchButton.type = 'button';
+    searchButton.className = 'btn btn-dark btn-sm mb-2 w-100';
+    searchButton.textContent = '🔎 Rechercher le propriétaire';
+    ownerInput.closest('[class*="col-"]').insertBefore(searchButton, ownerInput);
+    const suggestions = document.createElement('div');
+    suggestions.className = 'list-group position-absolute w-100 shadow-sm';
+    suggestions.style.zIndex = '10';
+    ownerInput.closest('[class*="col-"]').style.position = 'relative';
+    ownerInput.closest('[class*="col-"]').append(suggestions);
+    const rechercherProprietaire = async () => {
+      const value = searchBox.value.trim();
+      suggestions.innerHTML = '';
+      if (value.length < 2) return;
+      const response = await fetch(`/api/recensement/proprietaires?q=${encodeURIComponent(value)}`);
+      const owners = await response.json();
+      owners.forEach(owner => {
+        const item = document.createElement('button');
+        item.type = 'button'; item.className = 'list-group-item list-group-item-action text-start';
+        item.textContent = `${owner.nom}${owner.cin ? ` · CIN ${owner.cin}` : ''}`;
+        item.addEventListener('click', () => {
+          ownerInput.value = owner.nom;
+          document.querySelector('[name="proprietaire_telephone"]').value = owner.telephone;
+          document.querySelector('[name="proprietaire_cin"]').value = owner.cin;
+          document.querySelector('[name="proprietaire_adresse"]').value = owner.adresse;
+          searchBox.value = ''; suggestions.innerHTML = '';
+        });
+        suggestions.append(item);
+      });
+    };
+    searchButton.addEventListener('click', rechercherProprietaire);
+    searchBox.addEventListener('keydown', event => { if (event.key === 'Enter') { event.preventDefault(); rechercherProprietaire(); } });
+  }
+  const vehicleTable = document.querySelector('.table-responsive table');
+  if (vehicleTable) {
+    const statusHeader = document.createElement('th');
+    statusHeader.textContent = 'Statut';
+    vehicleTable.tHead.rows[0].appendChild(statusHeader);
+    vehicleTable.tBodies[0].querySelectorAll('tr').forEach((row, index) => {
+      if (row.cells.length === 1) return;
+      const status = syncStatuses[index] || 'pending';
+      const labels = { synced: 'Synchronisé', syncing: 'En cours', error: 'Erreur', pending: 'En attente' };
+      const colors = { synced: 'success', syncing: 'primary', error: 'danger', pending: 'secondary' };
+      const cell = row.insertCell(-1);
+      cell.innerHTML = `<span class="badge bg-${colors[status] || 'secondary'}">${labels[status] || status}</span> <a class="btn btn-sm btn-outline-dark ms-2" href="/recensement-vehicules/${vehicleIds[index]}">Voir</a>`;
+    });
+  }
+  const form = document.querySelector('form[method="post"]');
+  const vehicleRow = [...form.querySelectorAll('.row.g-3.mb-4')][0];
+  const plaqueBox = vehicleRow.querySelector('[name="plaque"]').closest('[class*="col-"]');
+  const marqueBox = vehicleRow.querySelector('[name="marque"]').closest('[class*="col-"]');
+  const publiciteBox = vehicleRow.querySelector('[name="a_des_publicites"]').closest('[class*="col-"]');
+  vehicleRow.insertBefore(plaqueBox, vehicleRow.firstElementChild);
+  vehicleRow.insertBefore(marqueBox, plaqueBox.nextElementSibling);
+  publiciteBox.className = 'col-12 pt-2';
+  vehicleRow.appendChild(publiciteBox);
+  const nationalBox = document.createElement('div');
+  nationalBox.className = 'col-12 pt-1';
+  nationalBox.innerHTML = '<div class="form-check"><input class="form-check-input" type="checkbox" name="transport_national" id="transport_national"><label class="form-check-label" for="transport_national">Transport national</label></div>';
+  vehicleRow.appendChild(nationalBox);
+  const ownerRow = [...form.querySelectorAll('.row.g-3.mb-4')][1];
+  const driverBlock = document.createElement('div');
+  driverBlock.className = 'row g-3 mt-3 pt-3 border-top';
+  driverBlock.innerHTML = `
+    <div class="col-12"><h3 class="h6 mb-0 text-danger">Chauffeur affecté au véhicule <span class="text-muted fw-normal">(facultatif)</span></h3></div>
+    <div class="col-md-4"><label class="form-label">Nom</label><input name="chauffeur_nom" class="form-control" placeholder="Nom du chauffeur"></div>
+    <div class="col-md-4"><label class="form-label">Prénom</label><input name="chauffeur_prenom" class="form-control" placeholder="Prénom du chauffeur"></div>
+    <div class="col-md-4"><label class="form-label">Téléphone</label><input name="chauffeur_telephone" class="form-control" type="tel" placeholder="034 00 000 00"></div>
+    <div class="col-md-4"><label class="form-label">CIN</label><input name="chauffeur_cin" class="form-control" placeholder="Numéro CIN"></div>
+    <div class="col-md-4"><label class="form-label">Catégorie de permis</label><select name="chauffeur_type_permis" class="form-select"><option value="">Choisir</option><option>A</option><option>B</option><option>C</option><option>D</option><option>E</option><option>AB</option><option>CD</option><option>Autre</option></select></div>
+    <div class="col-md-4"><label class="form-label">Années d'expérience</label><input name="chauffeur_annee_experience" class="form-control" type="number" min="0" max="70" placeholder="5"></div>
+    <div class="col-md-4"><label class="form-label">Photo du chauffeur</label><input name="chauffeur_image" class="form-control driver-photo" type="file" accept="image/jpeg,image/png,image/webp"></div>
+    <div class="col-md-4"><label class="form-label">Permis - recto</label><input name="chauffeur_permis_recto" class="form-control driver-photo" type="file" accept="image/jpeg,image/png,image/webp"></div>
+    <div class="col-md-4"><label class="form-label">Permis - verso</label><input name="chauffeur_permis_verso" class="form-control driver-photo" type="file" accept="image/jpeg,image/png,image/webp"></div>`;
+  ownerRow.appendChild(driverBlock);
+  const children = [...form.children];
+  const sections = [];
+  for (let i = 0; i < 3; i++) {
+    const section = document.createElement('div');
+    section.className = 'wizard-step' + (i === 0 ? ' active' : '');
+    section.append(children.shift(), children.shift());
+    sections.push(section);
+  }
+  form.insertBefore(sections[0], form.firstChild);
+  form.insertBefore(sections[1], sections[0].nextSibling);
+  form.insertBefore(sections[2], sections[1].nextSibling);
+  const progress = document.createElement('div');
+  progress.innerHTML = '<div class="wizard-progress mb-2"><div class="wizard-progress-bar"></div></div><div class="wizard-dots mb-4"><span class="active">1. Véhicule</span><span>2. Propriétaire</span><span>3. Photo</span></div>';
+  form.insertBefore(progress, sections[0]);
+  let currentStep = 0;
+  function navigation() {
+    const nav = document.createElement('div');
+    nav.className = 'd-flex justify-content-between mt-4';
+    nav.innerHTML = `${currentStep > 0 ? '<button type="button" class="btn btn-outline-secondary prev-step">← Retour</button>' : '<span></span>'}${currentStep < 2 ? '<button type="button" class="btn btn-primary next-step">Suivant →</button>' : '<button type="submit" class="btn btn-primary btn-lg px-4">✓ Enregistrer le véhicule</button>'}`;
+    sections[currentStep].appendChild(nav);
+    nav.querySelector('.next-step')?.addEventListener('click', () => {
+      const fields = sections[currentStep].querySelectorAll('input[required], select[required], textarea[required]');
+      if (![...fields].every(field => field.reportValidity())) return;
+      currentStep++;
+      render();
+    });
+    nav.querySelector('.prev-step')?.addEventListener('click', () => { currentStep--; render(); });
+  }
+  function render() {
+    sections.forEach((section, i) => section.classList.toggle('active', i === currentStep));
+    progress.querySelector('.wizard-progress-bar').style.width = `${((currentStep + 1) / 3) * 100}%`;
+    progress.querySelectorAll('.wizard-dots span').forEach((dot, i) => dot.classList.toggle('active', i <= currentStep));
+    sections.forEach(section => section.querySelector('.mt-4')?.remove());
+    navigation();
+  }
+  render();
+  document.getElementById('photo').addEventListener('change', function (e) { const file=e.target.files[0]; if(file) document.getElementById('photo-preview').src=URL.createObjectURL(file); });
+  document.querySelectorAll('.vehicle-photo').forEach(input => input.addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) document.getElementById(this.dataset.preview).src = URL.createObjectURL(file);
+  }));
+  document.querySelectorAll('.driver-photo').forEach(input => input.addEventListener('change', function () {
+    if (this.files[0]) this.classList.add('border-danger');
+  }));
+</script>
+{% endblock %}

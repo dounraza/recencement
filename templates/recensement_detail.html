@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Détail du véhicule {{ vehicule.plaque }}{% endblock %}
+{% block content %}
+<style>
+  .detail-card { border:0; border-radius:16px; box-shadow:0 8px 24px rgba(0,0,0,.08); }
+  .detail-photo { width:100%; height:220px; object-fit:cover; border-radius:12px; background:#f3f3f3; }
+  .detail-label { color:#777; font-size:.75rem; text-transform:uppercase; font-weight:700; }
+  .detail-value { font-weight:650; color:#171717; }
+</style>
+<div class="container-fluid py-4" style="max-width:1200px">
+  <div class="d-flex justify-content-between align-items-center mb-4"><div><div class="text-uppercase small text-muted">Fiche véhicule</div><h1 class="h3 mb-0">{{ vehicule.plaque }}</h1></div><a href="{{ url_for('recensement_vehicules') }}" class="btn btn-outline-dark">← Retour</a></div>
+  {% with messages = get_flashed_messages(with_categories=true) %}{% for category, message in messages %}<div class="alert alert-{{ category }}">{{ message }}</div>{% endfor %}{% endwith %}
+  <div class="card detail-card mb-4"><div class="card-body p-4"><h2 class="h5 mb-3">Modifier la fiche</h2><form method="post" action="{{ url_for('voir_recensement', recensement_id=vehicule.id) }}"><div class="row g-3">
+    <div class="col-md-3"><label class="detail-label">Plaque</label><input class="form-control" value="{{ vehicule.plaque }}" disabled></div>
+    <div class="col-md-3"><label class="detail-label">Marque</label><select name="marque" class="form-select">{% for marque in (marques or ['Mercedes Sprinter','Mercedes 207','Mercedes 307','Mercedes 308','Mercedes 309','Mercedes 410','Toyota Hiace','Toyota Coaster','Mazda Bongo','Mazda E-Series','Mazda Eclipse','Peugeot J5','Peugeot Boxer','Renault Trafic','Renault Master','Hyundai H-1 / Starex','Volkswagen Crafter','Iveco Daily','Nissan Caravan / Urvan','Isuzu','Autre']) %}<option {% if marque == vehicule.marque %}selected{% endif %}>{{ marque }}</option>{% endfor %}</select></div>
+    <div class="col-md-3"><label class="detail-label">Modèle</label><input name="modele" class="form-control" value="{{ vehicule.modele or '' }}"></div>
+    <div class="col-md-3"><label class="detail-label">Couleur</label><select name="couleur" class="form-select"><option value="">Choisir</option>{% for couleur in ['Blanc','Noir','Bleu','Rouge','Vert','Jaune','Gris','Orange','Marron','Beige','Autre'] %}<option {% if couleur == vehicule.couleur %}selected{% endif %}>{{ couleur }}</option>{% endfor %}</select></div>
+    <div class="col-md-3"><label class="detail-label">Capacité</label><input name="capacite_places" class="form-control" type="number" min="1" max="200" value="{{ vehicule.capacite_places or '' }}"></div>
+    <div class="col-md-3 d-flex align-items-end"><div class="form-check"><input name="a_des_publicites" class="form-check-input" type="checkbox" {% if vehicule.a_des_publicites %}checked{% endif %}><label class="form-check-label">Publicités</label></div></div>
+    <div class="col-md-3 d-flex align-items-end"><div class="form-check"><input name="transport_national" class="form-check-input" type="checkbox" {% if vehicule.transport_national %}checked{% endif %}><label class="form-check-label">Transport national</label></div></div>
+    <div class="col-md-6"><label class="detail-label">Propriétaire</label><input name="proprietaire_nom" class="form-control" value="{{ vehicule.proprietaire_nom }}"></div>
+    <div class="col-md-3"><label class="detail-label">Téléphone</label><input name="proprietaire_telephone" class="form-control" value="{{ vehicule.proprietaire_telephone or '' }}"></div>
+    <div class="col-md-3"><label class="detail-label">CIN</label><input name="proprietaire_cin" class="form-control" value="{{ vehicule.proprietaire_cin or '' }}"></div>
+    <div class="col-md-6"><label class="detail-label">Adresse</label><input name="proprietaire_adresse" class="form-control" value="{{ vehicule.proprietaire_adresse or '' }}"></div>
+    <div class="col-12"><hr><h3 class="h6 text-danger">Chauffeur affecté</h3></div>
+    <div class="col-md-3"><label class="detail-label">Nom</label><input name="chauffeur_nom" class="form-control" value="{{ vehicule.chauffeur_nom or '' }}"></div>
+    <div class="col-md-3"><label class="detail-label">Prénom</label><input name="chauffeur_prenom" class="form-control" value="{{ vehicule.chauffeur_prenom or '' }}"></div>
+    <div class="col-md-3"><label class="detail-label">Téléphone</label><input name="chauffeur_telephone" class="form-control" value="{{ vehicule.chauffeur_telephone or '' }}"></div>
+    <div class="col-md-3"><label class="detail-label">CIN</label><input name="chauffeur_cin" class="form-control" value="{{ vehicule.chauffeur_cin or '' }}"></div>
+    <div class="col-md-3"><label class="detail-label">Permis</label><select name="chauffeur_type_permis" class="form-select"><option value="">Choisir</option>{% for permis in ['A','B','C','D','E','AB','CD','Autre'] %}<option {% if permis == vehicule.chauffeur_type_permis %}selected{% endif %}>{{ permis }}</option>{% endfor %}</select></div>
+    <div class="col-md-3"><label class="detail-label">Années d'expérience</label><input name="chauffeur_annee_experience" class="form-control" type="number" min="0" max="70" value="{{ vehicule.chauffeur_annee_experience or '' }}"></div>
+    <div class="col-12 text-end"><button class="btn btn-danger px-4" type="submit">Enregistrer les modifications</button></div>
+  </div></form></div></div>
+  <div class="card detail-card mb-4"><div class="card-body p-4"><div class="row g-3">
+    <div class="col-md-3"><span class="detail-label">Marque</span><div class="detail-value">{{ vehicule.marque }}</div></div>
+    <div class="col-md-3"><span class="detail-label">Modèle</span><div class="detail-value">{{ vehicule.modele or '—' }}</div></div>
+    <div class="col-md-3"><span class="detail-label">Capacité</span><div class="detail-value">{{ vehicule.capacite_places or '—' }} places</div></div>
+    <div class="col-md-3"><span class="detail-label">Publicité</span><div class="detail-value">{{ 'Oui' if vehicule.a_des_publicites else 'Non' }}</div></div>
+    <div class="col-md-3"><span class="detail-label">Couleur</span><div class="detail-value">{{ vehicule.couleur or '—' }}</div></div>
+    <div class="col-md-3"><span class="detail-label">Statut synchro</span><div class="detail-value">{{ vehicule.sync_status }}</div></div>
+  </div></div></div>
+  <div class="card detail-card mb-4"><div class="card-body p-4"><h2 class="h5 mb-3">Propriétaire</h2><div class="row g-3"><div class="col-md-4"><span class="detail-label">Nom</span><div class="detail-value">{{ vehicule.proprietaire_nom }}</div></div><div class="col-md-4"><span class="detail-label">Téléphone</span><div class="detail-value">{{ vehicule.proprietaire_telephone or '—' }}</div></div><div class="col-md-4"><span class="detail-label">CIN</span><div class="detail-value">{{ vehicule.proprietaire_cin or '—' }}</div></div><div class="col-md-6"><span class="detail-label">Adresse</span><div class="detail-value">{{ vehicule.proprietaire_adresse or '—' }}</div></div></div></div></div>
+  <div class="card detail-card mb-4"><div class="card-body p-4"><h2 class="h5 mb-3">Chauffeur</h2><div class="row g-3"><div class="col-md-3"><span class="detail-label">Nom</span><div class="detail-value">{{ vehicule.chauffeur_nom or '—' }} {{ vehicule.chauffeur_prenom or '' }}</div></div><div class="col-md-3"><span class="detail-label">Téléphone</span><div class="detail-value">{{ vehicule.chauffeur_telephone or '—' }}</div></div><div class="col-md-3"><span class="detail-label">Permis</span><div class="detail-value">{{ vehicule.chauffeur_type_permis or '—' }}</div></div><div class="col-md-3"><span class="detail-label">Expérience</span><div class="detail-value">{{ vehicule.chauffeur_annee_experience if vehicule.chauffeur_annee_experience is not none else '—' }}{% if vehicule.chauffeur_annee_experience is not none %} ans{% endif %}</div></div></div></div></div>
+  {% if vehicule.chauffeur_images %}<div class="card detail-card mb-4"><div class="card-body p-4"><h2 class="h5 mb-3">Photos du chauffeur et du permis</h2><div class="row g-3">{% for cle, libelle in [('portrait','Photo'),('permis_recto','Permis recto'),('permis_verso','Permis verso')] %}<div class="col-6 col-md-4">{% if vehicule.chauffeur_images.get(cle) %}<img class="detail-photo" src="{{ url_for('static', filename='driver_uploads/' ~ vehicule.chauffeur_images.get(cle)) }}" alt="{{ libelle }}">{% else %}<div class="detail-photo d-flex justify-content-center align-items-center text-muted">Pas de photo</div>{% endif %}<div class="text-center small fw-bold mt-2">{{ libelle }}</div></div>{% endfor %}</div></div></div>{% endif %}
+  <div class="card detail-card"><div class="card-body p-4"><h2 class="h5 mb-3">Photos du véhicule</h2><div class="row g-3">{% for vue, libelle in [('devant','Avant'),('derriere','Arrière'),('gauche','Côté gauche'),('droite','Côté droit'),('interieur','Intérieur')] %}<div class="col-6 col-md">{% if vehicule.images.get(vue) %}<img class="detail-photo" src="{{ url_for('static', filename='vehicle_uploads/' ~ vehicule.images.get(vue)) }}" alt="{{ libelle }}">{% else %}<div class="detail-photo d-flex justify-content-center align-items-center text-muted">Pas de photo</div>{% endif %}<div class="text-center small fw-bold mt-2">{{ libelle }}</div></div>{% endfor %}</div></div></div>
+</div>
+{% endblock %}

@@ -1,0 +1,781 @@
+{% extends "base.html" %}
+{% block title %} CPP-SYSTEM | LISTE DATA 
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+integrity="sha384-KyZXEAg3QhqLMpG8r+dfRk3/c9KYJzGB6b6Btv8H5ZWvbGd1pJC7nj/obG2SNwAp"
+crossorigin="anonymous">
+{% endblock %}
+{% block content %}
+<style>
+  @import url(https://fonts.googleapis.com/css?family=Montserrat);
+  #msform {
+    text-align: center;
+    position: relative;
+    margin-top: 30px;
+}
+/* CSS to disable scrolling on the body */
+body.no-scroll {
+    overflow: hidden;
+}
+
+.previous{display: none;} 
+.next{display: none;} 
+#cooperative{display: none;} 
+.center {
+            top: 1050px;
+            left: 50%;
+            transform: translateX(50%);
+        }
+#msform fieldset {
+    background: white;
+    border: 0 none;
+    border-radius: 8px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
+    box-sizing: border-box;
+    width: 90%;
+    margin: 0 2%;
+
+    /*stacking fieldsets above each other*/
+    position: relative;
+}
+
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+    display: none;
+}
+
+/*inputs*/
+#msform input, #msform textarea {
+    padding: 15px;
+    border: 1px solid #cbcfc9;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: montserrat;
+    color: #2C3E50;
+    font-size: 13px;
+}
+
+#msform input:focus, #msform textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid #2098ce;
+    outline-width: 0;
+    transition: All 0.5s ease-in;
+    -webkit-transition: All 0.5s ease-in;
+    -moz-transition: All 0.5s ease-in;
+    -o-transition: All 0.5s ease-in;
+}
+
+/*buttons*/
+#msform .action-button {
+    width: 100px;
+    background: #2098ce;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+    margin-top: 1%;
+}
+#msform #check {
+    width: 100px;
+    background: #51ce20;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+#msform #nextrecensement{
+    width: 100px;
+    background: #e1040c;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform #terminer_vehicule {
+    width: 100px;
+    background: #e1040c;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+#msform #terminer_paper {
+    width: 100px;
+    background: #e1040c;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+#msform #Pointage {
+    width: 100px;
+    background: #130418;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform .action-button:hover, #msform .action-button:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #2098ce;
+}
+
+#msform .action-button-previous {
+    width: 100px;
+    background: #aCbEd0;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform .action-button-previous:hover, #msform .action-button-previous:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #aCbEd0;
+}
+
+/*headings*/
+.fs-title {
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #2C3E50;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.fs-subtitle {
+    font-weight: normal;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/*progressbar*/
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    width: 161%;
+    /*CSS counters to number the steps*/
+    counter-reset: step;
+}
+
+#progressbar li {
+    list-style-type: none;
+    color: #666;
+    text-transform: uppercase;
+    font-size: 9px;
+    width: 33.33%;
+    float: left;
+    position: relative;
+    letter-spacing: 1px;
+}
+
+#progressbar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 24px;
+    height: 24px;
+    line-height: 26px;
+    display: block;
+    font-size: 12px;
+    color: #333;
+    background: white;
+    border-radius: 25px;
+    margin: 0 auto 10px auto;
+}
+
+/*progressbar connectors*/
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: white;
+    position: absolute;
+    left: -50%;
+    top: 9px;
+    z-index: -1; /*put it behind the numbers*/
+}
+
+#progressbar li:first-child:after {
+    /*connector not needed before the first step*/
+    content: none;
+}
+
+/*marking active/completed steps blue*/
+/*The number of the step and the connector before it = blue*/
+#progressbar li.active:before, #progressbar li.active:after {
+    background: #2098ce;
+    color: white;
+}
+#cooperative{
+  display: none;
+}
+#check{
+  display: none;
+}
+#plaque_im{display: none;}
+#devant{display: block;}
+  </style>
+  <div class="container mt-5">
+   
+  
+    <div class="alert alert-primary" role="alert" id="customAlert" style="display: none;">
+      Action effectué avec succès!
+    </div>
+  </div>
+  
+  <div ><a href="{{url_for('dashboard')}}" class="btn btn-xs btn-dark"> <i class="fa fa-home"></i> Home </a>&nbsp </div>
+
+  <div ><a href="{{url_for('editVehicle')}}" class="btn btn-xs btn-warning mt-5">+ Pointage & Recensement </a></div>
+<div class="col-md-12 table-responsive">
+    <table id="examplea" class="table table-striped" style="width:100%">
+      
+        <thead>
+          <tr>
+           
+            <th >Vehicule</th>
+            <!-- <th >Date</th> -->
+            <th >Coopérative</th>
+            <th >Status Gallery</th>
+            <th >Status Paper</th>
+            <th >Status Team</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+            {% for item in record %}
+                <tr>
+                  
+                  <td>{{item.plaque}}</td>
+                  <!-- <td>{{item.date}}</td> -->
+                  <!-- <td>{{item[2]}}</td> -->
+                  <td class="text-danger">{{item.cooperative}}</td>
+                  <!-- <td ><a href="#" class="senduni" data-vehic="{{item.vehicule}}" data-type="{{item.type}}"><i class="fa fa-envelope"></i></a></td> -->
+                  {% if item.gallery_recenc == "OK" :%}
+                    <td class="text-success">Gallery Recencé</td>
+                  {% else %}
+                  <td class="text-danger">Non Recencé</td>
+                  {% endif %}  
+                  {% if item.paper_recenc == "OK" :%}
+                  <td class="text-success">Papier Recencé</td>
+                  {% else %}
+                  <td class="text-danger">Non Recencé</td>
+                  {% endif %}  
+                  {% if item.team_recenc == "OK" :%}
+                    <td class="text-success">Team Recencé</td>
+                  {% else %}
+                  <td class="text-danger">Non Recencé</td>
+                  {% endif %}  
+                  <td>
+                    <!-- <a href="#" class="btn btn-xs" title="Recensement"><i class="fa fa-"></i></a> -->
+                    
+                    <a href="{{url_for('editVehicle',bus_number=item.plaque)}}" class="btn btn-xs" title="Edition vehicule"><i class="fa fa-edit"></i></a>
+                    <!-- <button type="button" class="btn btn-xs" title="Vehicule" data-bs-toggle="modal" data-bs-target="#vehiculefile" data-bus="{{item[0]}}" data-cooperative="{{item[3]}}"  onclick="handleButtonClick(this)">
+                      <i class="fa fa-bus"></i>
+                    </button>
+                   
+                    <button type="button" class="btn btn-xs" title="Papier" data-bs-toggle="modal" data-bs-target="#paperleader" data-bus="{{item[0]}}" data-cooperative="{{item[3]}}" onclick="handleButtonClick(this)">
+                      <i class="fa fa-file"></i>
+                    </button>
+                    <button type="button" class="btn btn-xs" title="Equipe" data-bs-toggle="modal" data-bs-target="#teamleader"  data-bus="{{item[0]}}" data-cooperative="{{item[3]}}" onclick="handleButtonClick(this)">
+                      <i class="fa fa-users"></i>
+                    </button> -->
+                </td>
+                </tr>
+            {% endfor %}
+            <!-- <th scope="row">1</th>
+            <td>2199TBG</td>
+            <td>01/01/2023</td>
+            <td>12121,12121</td>
+            <td>
+                <a href="#" class="btn btn-xs" title="Recensement"><i class="fa fa-pencil"></i></a>
+                <a href="#" class="btn btn-xs" title="Ajouter Papier" ><i class="fa fa-plane"></i></a>
+                <a href="#" class="btn btn-xs" title="Equipe"><i class="fa fa-users"></i></a>
+            </td> -->
+          
+         
+        </tbody>
+      </table>
+</div>
+<div class="modal fade" id="teamleader"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="staticBackdropLabel">TEAM</h5> -->
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="msform">
+        
+        {% include 'steps/included/team.html'%}
+      </form>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button> -->
+        <button type="button" class="btn btn-xs btn-danger" id="sendteam">Send</button> 
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="paperleader" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="staticBackdropLabel">TEAM</h5> -->
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="msform">
+        
+        {% include 'steps/included/paper.html'%}
+      </form>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Understood</button> -->
+        
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="vehiculefile" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <!-- <h5 class="modal-title" id="staticBackdropLabel">TEAM</h5> -->
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="msform">
+          <input type="text" name="cooperative_check" class="cooperative_check"id="cooperative_check" value="">
+          <input type="hidden" name="vehicule" id="vehicule" value="">
+        {% include 'steps/included/partVehicule.html'%}
+      </form>
+      </div>
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+        <button type="button" class="btn btn-xs btn-danger" id="sending">Send</button> 
+      </div>
+    </div>
+  </div>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
+
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap5.min.js"></script>
+
+<script>
+  new DataTable('#examplea');
+ function handleButtonClick(element) {
+   $('#gallery').show();     
+  const bus = element.getAttribute("data-bus");
+
+  const cooperative = element.getAttribute("data-cooperative");
+  $('.cooperative_check').val(cooperative);
+ $('#vehicule').val(bus);
+
+  // Do something with the data-id, e.g., send it to the server or perform an action based on it.
+}
+  function showdomchauffeur(moncheckbox){
+     
+     if(moncheckbox.checked){
+      $('#sendteam').show();
+       if(moncheckbox.value==="chauffeur"){
+           document.getElementById('receveur').checked = false; 
+           document.getElementById('proprietaire').checked = false; 
+           $('#chauffeurForm').show();
+           $('#receveurForm').hide();
+           $('#proprietaireForm').hide();
+       }
+       if(moncheckbox.value==="receveur"){
+           document.getElementById('chauffeur').checked = false; 
+           document.getElementById('proprietaire').checked = false; 
+           $('#chauffeurForm').hide();
+           $('#receveurForm').show();
+           $('#proprietaireForm').hide();
+       }
+       if(moncheckbox.value==="proprietaire"){
+           document.getElementById('chauffeur').checked = false; 
+           document.getElementById('receveur').checked = false; 
+           $('#chauffeurForm').hide();
+           $('#receveurForm').hide();
+           $('#proprietaireForm').show();
+       }
+       $('#vals').val(moncheckbox.value);
+     }
+     else{
+      $('#sendteam').hide();
+       if(moncheckbox.value==="chauffeur"){
+           $('#chauffeurForm').hide();
+           $('#receveurForm').hide();
+           $('#proprietaireForm').hide();
+       }
+       if(moncheckbox.value==="receveur"){
+           $('#chauffeurForm').hide();
+           $('#receveurForm').hide();
+           $('#proprietaireForm').hide();
+       }
+       if(moncheckbox.value==="proprietaire"){
+           $('#chauffeurForm').hide();
+           $('#receveurForm').hide();
+           $('#proprietaireForm').hide();
+       }
+       //le code qui le cache
+       $('#vals').val('');
+     }
+   }
+   const customAlert = document.getElementById('customAlert');
+    customAlert.style.backgroundColor = '#20ce20';
+    customAlert.style.borderColor = '#20ce20';
+    customAlert.style.color = '#FFF';
+    customAlert.style.fontSize = '20px';
+    customAlert.style.fontWeight = 'bold';
+    customAlert.style.textAlign = 'center';
+    
+   function showSuccessMessageAndReload(param,type) {
+            // Show the success message
+        
+         $('#customAlert').show();
+         setTimeout(cacherAlerte(), 100000);
+        
+     }
+     function cacherAlerte() {
+                customAlert.style.display = 'none';
+    }
+     
+     $( "#sendteam" ).on( "click", function() {
+      $('#spinnteam').show();
+      var role=$('#vals').val();
+        nom="#";
+        prenom="#";
+        tel="#"
+        if(role==="chauffeur"){
+            nom=$('#nom_chauffeur').val();
+            prenom=$('#prenom_chauffeur').val();
+            tel=$('#tel_chauffeur').val();
+        }
+        if(role==="receveur"){
+            nom=$('#nom_receveur').val();
+            prenom=$('#prenom_receveur').val();
+            tel=$('#tel_receveur').val();
+        }
+           
+        if(role==="proprietaire"){
+            nom=$('#nom_prop').val();
+            prenom=$('#prenom_prop').val();
+            tel=$('#tel_prop').val();
+        }
+        let files = new FormData(), // you can consider this as 'data bag'
+        url = 'sendTeamVehicule';
+        const photo_c = document.getElementById('photo_ch');
+        const photo_r = document.getElementById('photo_rc');
+        const photo_p = document.getElementById('photo_pr');
+        const cin_g = document.getElementById('cin_g');
+        const cin_r_g = document.getElementById('cin_r_g');
+        const cin_v = document.getElementById('cin_v');
+        const cin_p_g = document.getElementById('cin_p_recto1');
+        const cin_p_v = document.getElementById('cin_p_verso1');
+        const cin_r_v = document.getElementById('cin_r_v');
+        const permis_v = document.getElementById('permis_v');
+        const permis_r_v = document.getElementById('permis_r_v');
+        const permis_g = document.getElementById('permis_g');
+        const permis_r_g = document.getElementById('permis_r_g');
+
+
+
+
+    var fileInputs = [
+            document.getElementById('cin_recto1'),
+            document.getElementById('photo_ch1'),
+            document.getElementById('photo_rc1'),
+            document.getElementById('photo_pr1'),
+            document.getElementById('cin_verso1'),
+            document.getElementById('permis_verso1'),
+            document.getElementById('permis_recto1'),
+
+            document.getElementById('cin_r_recto1'),
+            document.getElementById('cin_r_verso1'),
+            document.getElementById('cin_p_recto1'),
+            document.getElementById('cin_p_verso1'),
+            document.getElementById('permis_r_recto1'),
+            document.getElementById('permis_r_verso1')
+            // Add more file input elements as needed
+            ];
+            for (var i = 0; i < fileInputs.length; i++) {
+                
+                var fileInput = fileInputs[i];
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                     var filesList = fileInput.files;
+                 
+                // Append each file to the FormData with a unique key (e.g., 'file1', 'file2', etc.)
+                for (var j = 0; j < filesList.length; j++) {
+                    var file = filesList[j];
+                    files.append(fileInput.name, file);
+                }
+                }
+             }
+        
+        plaque=$('#vehicule').val();
+        cooperative=$('.cooperative_check').val();
+   
+        files.append('role',role);
+        files.append('nom',nom);
+        files.append('prenom',prenom);
+        files.append('tel',tel);
+        files.append('plaque',plaque);
+        
+        files.append('cooperative',cooperative);
+        $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+          $('#spinnteam').hide();
+          alert('success');
+        
+          setTimeout(showSuccessMessageAndReload(response,'Preposé'), 3000);
+
+            cin_g.src = '';
+            cin_r_g.src = '';
+            cin_v.src = '';
+            cin_r_v.src = '';
+            permis_v.src = '';
+            permis_r_v.src = '';
+            permis_g.src = '';
+            permis_r_g.src = '';
+            photo_c.src="";
+            photo_r.src="";
+            photo_p.src="";
+            cin_p_g.src="";
+            cin_p_v.src="";
+            
+            document.getElementById('nom_chauffeur').value = '';
+            document.getElementById('prenom_chauffeur').value = '';
+            document.getElementById('tel_chauffeur').value = '';
+            document.getElementById('nom_receveur').value = '';
+            document.getElementById('prenom_receveur').value = '';
+            document.getElementById('tel_receveur').value = '';
+            document.getElementById('nom_prop').value = '';
+            document.getElementById('prenom_prop').value = '';
+            document.getElementById('tel_prop').value = '';
+            
+            document.getElementById('cin_recto1').value = '';
+            document.getElementById('cin_verso1').value = '';
+            document.getElementById('permis_verso1').value = '';
+            document.getElementById('permis_recto1').value = '';
+
+            document.getElementById('cin_r_recto1').value = '';
+            document.getElementById('cin_r_verso1').value = '';
+           
+            document.getElementById('permis_r_recto1').value = '';
+            document.getElementById('permis_r_verso1').value = '';
+
+            document.getElementById('cin_p_recto1').value = '';
+            document.getElementById('cin_p_verso1').value = '';
+        
+           
+          
+        },
+        error: function (err) {
+            console.log(err);
+
+        }
+    });
+     });
+   
+     $( "#terminer_paper" ).on( "click", function() {
+      $('#spinnpaper').show();
+      let files = new FormData(), // you can consider this as 'data bag'
+       url = 'sendFilePaperVehicule';
+       const assurance = document.getElementById('assurance');
+       const assurance_v1 = document.getElementById('assurance_v1');
+       
+        const carte_grise_recto = document.getElementById('carte_grise_recto');
+        const carte_grise_verso = document.getElementById('carte_grise_verso');
+        const licence = document.getElementById('licence');
+        const licence_v1 = document.getElementById('licence_v1');
+        const nifsta_r1 = document.getElementById('nifsta_r1');
+        const nifsta_v1 = document.getElementById('nifsta_v1');
+        const visite_technique = document.getElementById('visite_technique');
+        
+       var fileInputs = [
+           document.getElementById('assurance1'),
+           document.getElementById('carte_grise_recto1'),
+           document.getElementById('carte_grise_verso1'),
+           document.getElementById('licence1'),
+           document.getElementById('licence_v1'),
+           document.getElementById('nifsta_r1'),
+           document.getElementById('nifsta_v1'),
+           document.getElementById('assurance_v1'),
+           document.getElementById('visite_technique1')
+           
+           // Add more file input elements as needed
+           ];
+           for (var i = 0; i < fileInputs.length; i++) {
+               
+               var fileInput = fileInputs[i];
+               if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                    var filesList = fileInput.files;
+                
+               // Append each file to the FormData with a unique key (e.g., 'file1', 'file2', etc.)
+               for (var j = 0; j < filesList.length; j++) {
+                   var file = filesList[j];
+                   files.append(fileInput.name, file);
+               }
+               }
+            }
+      cooperative=$('#cooperative_check').val();
+       
+       
+       plaque=$('#vehicule').val();
+       files.append('plaque',plaque);
+       files.append('cooperative',cooperative);
+       $.ajax({
+       type: 'POST',
+       url: url,
+       processData: false,
+       contentType: false,
+       data: files,
+       success: function (response) {
+        //   console.log(response)
+        $('#spinnpaper').hide();
+        alert('success');
+        
+        assurance.src = '';
+        carte_grise_verso.src = '';
+        carte_grise_recto.src = '';
+        visite_technique.src = '';
+        assurance_v1.src = ''; nifsta_r1.src = ''; nifsta_v1.src = ''; licence_v1.src = '';
+        licence.src = '';
+        document.getElementById('assurance1').value = '';
+        document.getElementById('assurance_v1').value = '';
+        document.getElementById('carte_grise_recto1').value = '';
+            document.getElementById('carte_grise_verso1').value = '';
+            document.getElementById('licence1').value = '';
+             document.getElementById('visite_technique1').value = '';
+             document.getElementById('licence_v1').value = '';
+           document.getElementById('nifsta_r1').value = '';
+           document.getElementById('nifsta_v1').value = '';
+           
+             setTimeout(showSuccessMessageAndReload(response,'Papier'), 3000);
+        //  if(response=="Papier véhicule envoyé avec succès!"){
+        //     setTimeout(showSuccessMessageAndReload(response,'Papier'), 3000);
+         
+        //  }
+       },
+       error: function (err) {
+           console.log(err);
+         
+       }
+   });
+     });
+   $( "#sending" ).on( "click", function() {
+    $('#spinnvehicule').show();
+        let files = new FormData(), // you can consider this as 'data bag'
+        url = 'sendFileVehicule';
+        
+        const derriere_vehicule = document.getElementById('derriere_vehicule');
+        const gauche_vehicule = document.getElementById('gauche_vehicule');
+        const droite_vehicule = document.getElementById('droite_vehicule');
+        const interieur_vehicule = document.getElementById('interieur_vehicule');
+        
+        var fileInputs = [
+            document.getElementById('devant_vehicule1'),
+            document.getElementById('derriere_vehicule1'),
+            document.getElementById('gauche_vehicule1'),
+            document.getElementById('droite_vehicule1'),
+            document.getElementById('interieur_vehicule1')
+            // Add more file input elements as needed
+            ];
+            for (var i = 0; i < fileInputs.length; i++) {
+                
+                var fileInput = fileInputs[i];
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                     var filesList = fileInput.files;
+                 
+                // Append each file to the FormData with a unique key (e.g., 'file1', 'file2', etc.)
+                for (var j = 0; j < filesList.length; j++) {
+                    var file = filesList[j];
+                    files.append(fileInput.name, file);
+                }
+                }
+             }
+        cooperative=$('#cooperative_check').val();
+      
+        plaque=$('#vehicule').val();
+        files.append('cooperative',cooperative);
+        files.append('plaque',plaque);
+        $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+          $('#spinnvehicule').hide();
+          alert('success');
+        
+          // if(response=="Gallerie envoyéé avec succès!"){
+            setTimeout(showSuccessMessageAndReload(response,'Gallery'), 3000);
+            derriere_vehicule.src = '';
+            gauche_vehicule.src = '';
+            droite_vehicule.src = '';
+            interieur_vehicule.src = '';
+        
+            document.getElementById('devant_vehicule1').value = '';
+            document.getElementById('interieur_vehicule1').value = '';
+            document.getElementById('droite_vehicule1').value = '';
+            document.getElementById('gauche_vehicule1').value = '';
+           
+            document.getElementById('gauche_vehicule1').value = '';
+            document.getElementById('derriere_vehicule1').value = '';
+         
+          // }
+          
+        },
+        error: function (err) {
+            console.log(err);
+          
+        }
+    });
+    });
+    function showSuccessMessage(){
+      $('#succesteam').show();
+      setTimeout(cachermsg(), 100000);
+    }
+    function cachermsg(){
+      $('#succesteam').hide();
+    }
+</script>
+{% endblock %}

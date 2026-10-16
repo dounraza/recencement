@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %} CPP-SYSTEM | COMMISSION {% endblock %}
+
+{% block content %}
+<style>
+.hidden{
+  display:none;
+}
+.spinner{
+  display:none;
+}
+</style>
+<hr/>
+<h4>Extraction des commissions <a href="{{url_for('dashboard')}}" class="btn btn-xs btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
+</svg></a></h4>
+<br>
+<h6 class="text-success"><i>Dernière date d'extraction le :{{data}}</i></h6>
+<!-- <form action="http://127.0.0.1:5000/storevers" method="POST"> -->
+    <div class="row gx-5">
+        <div class="col-md">
+          <div class="form-floating">
+            <input type="date" class="form-control" name="dateDebut" id="floatingInputGrid" placeholder="Date debut" value="">
+            <label for="floatingInputGrid">Date debut</label>
+          </div>
+        </div>
+        <div class="col-md">
+          <div class="form-floating">
+            <input type="date" class="dateFin form-control" name="dateFin" id="floatingInputGridc" placeholder="Date Fin" value="">
+          
+            <label for="floatingSelectGrid">Date fin</label>
+          </div>
+        </div>
+      </div>
+  <br/>
+  <div class="d-grid gap-2 col-6 mx-auto">
+    
+   <button class="btn btn-danger"id="sendextract" onclick="myFunction()" data-loading-text="Sending..."> <span class="spinner"><i class="fa fa-refresh fa-spin" id="js-loads"></i></span>  Lancer </button>
+
+   <input type="text"  class="hidden" id="js-text" value="" readonly>
+
+ 
+  </div>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+  
+  function myFunction() {
+    $("#sendextract").text("Loading...");
+    $("#js-loads").removeClass('spinner');
+    var d= document.getElementById("floatingInputGrid").value; 
+    var c= document.getElementById("floatingInputGridc").value; 
+    traitement(d,c);
+    
+  }
+  
+
+  function  traitement(db,df)
+  {
+    uri="/getAllcommission";
+        $.ajax({
+          type: 'POST',
+          url: uri,
+          async: true,
+          data: {'dateDebut':db,"dateFin":df},
+          datatype:"html",
+          success: function(text) {
+            alert(text)
+            $('#js-text').removeClass('hidden');
+            $('#js-text').val(text);
+            $("#sendextract").text("Relancer l'extraction");
+          },
+
+          error: function() {
+            console.log('La requête n\'a pas abouti');
+            $("#sendextract").text("Relancer l'extraction");
+          }
+
+        });
+  }
+  
+$('.btn').on('click', function() {
+    var $this = $(this);
+  $this.button('loading');
+    setTimeout(function() {
+       $this.button('reset');
+   }, 8000);
+});
+</script>
+{% endblock %}
+
+

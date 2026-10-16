@@ -1,0 +1,156 @@
+<html>
+    <head>
+      
+
+        <style>
+              h6{font-size:1em;}
+
+.container {
+  width: 21cm;
+  min-height: 29.7cm;
+}
+
+.invoice {
+  background: #fff;
+  width: 100%;
+  padding: 50px;
+}
+
+.logow {
+  width: 2cm;
+}
+
+.document-type {
+  text-align: right;
+  color: #444;
+}
+
+.conditions {
+  font-size: 0.7em;
+  color: #666;
+}
+
+.bottom-page {
+  font-size: 0.7em;
+}
+table,th,td{
+    border: 1px solid #ddd;
+    width:100%;
+}
+th,td{
+    font-size:8px;
+    padding:0px;
+}
+</style>
+
+    </head>
+    <body>
+        <div class="container">
+            <div class="invoice">
+                <div class="row col-md-12">
+                    <div class="col-md-3">
+                  
+                    </div>
+                    <div class="col-md-6">
+                        <h6 style="font-size: 10px;"><div class="text-center"><b>CPP-SYSTEM MADAGASCAR Sarl</b></div><br/>
+                             Bureau N°3 Immeuble Jacaranda Ambatonankanga<br/> 
+                             <div class="text-center"> Antananarivo 101 - MADAGASCAR </div>   <br/>
+                             NIF 400 3142 763 -RC 2018B00864-STATISTIQUES <br/>
+                             <div class="text-center">62021 11 20180 11005</div> 
+    
+                        </h6>
+                    </div>
+                    <div class="col-md-3">
+                          <h5 style="font-size: 8px;">Coopérative : <b>FANANTENANA</b></h5>
+                    </div>
+                   
+                </div>
+                <p style="font-size:10px;margin-left:10%">Relevé de véhicule :<b>2927TBB </b> du mois de : <b>OCTOBRE</b> Nombre de jour travaillé 19 Numero: RM00001</p>
+                <div class="row col-md-12">
+                    <div class="col-md-5" >
+                      
+                        <p class="addressDriver"style="font-size: 10px;" >
+                            Client :<em >Lovaniaina ANDRIANIRINA</em><br/>
+                            <span >Id Client : RM0001</span><br/> <span
+                               >N° TPE :10012113131</span><br/>
+                          
+                        </p>
+                    </div>
+                    <div class="col-md-4">
+                    <p class="addressDriver" style="font-size: 10px;">
+                            Offre :<em>TEST</em><br/>
+                            <span >reduction :100 %</span><br/> <span
+                                th:text="${driver.getLastName()}">Publicité :60000 Ariary</span><br/>
+                          
+                        </p>
+                    </div>
+                    <div class="col-md-3">
+                          <h5 style="font-size: 8px;">Ref : <b>R10/1212131/21212132134</b></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <table>
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>Tournée</th>
+                <th>Cash</th>
+                <th>Pass</th>
+                <th>Montant Cash</th>
+                <th>Montant Pass</th>
+                <th>Total</th>
+                <th>Commission Cpp 8%</th>
+                <th>CA pass versé</th>
+                <th>Chauffeur</th>
+                <th>Pc</th>
+                <th>Receveur</th>
+                <th>PR</th>
+                <th>Dont colis</th>
+                <th>Depense</th>
+            </tr>
+            </thead>
+            <tbody>
+          
+              
+                <td>1/10/2022</td>
+                <td>13</td>
+                <td>2</td>
+                <td>2</td>
+                <td class="text-right">1,20€</td>
+                <td>20%</td>
+                <td>200</td>
+                <td>200</td>
+                <td>200</td>
+                <td>Rabe</td>
+                <td>C0001</td>
+                <td>Rabe</td>
+                <td>R0001</td>
+                <td>0,00€</td>
+                <td >0,00€</td>
+
+            </tr>
+         
+          
+            <tr>
+                        <td><strong>Total HT</strong></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td class="text-right" th:text="${totalHT}">0,00€</td>
+                    </tr>
+                
+            </tbody>
+        </table>
+    </body>
+</html>

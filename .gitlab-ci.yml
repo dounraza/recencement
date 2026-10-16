@@ -1,0 +1,76 @@
+image: php:7.4
+variables:
+    GIT_STRATEGY: none 
+before_script:
+  - apt-get update -qq
+  - "which ssh-agent || ( apt-get install -qq openssh-client )"
+  - eval $(ssh-agent -s)
+  - ssh-add <(echo "$SSH_PRIVATE_KEY")
+  - mkdir -p ~/.ssh
+  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+
+stages:
+  - Deploiment UAT
+  - Deploiment STAGING
+  - Deploiment PRODUCTION
+
+
+deploy_uat:
+  stage: Deploiment UAT
+  script:
+    - echo "Deploy to uat server"
+    - >
+        if [ "$CI_RUNNER_DESCRIPTION" == "deployer-ci-cd" ]; then
+          ssh $USERNAME_PREPROD@192.168.0.60 "/bin/bash /var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA uat"
+        elif [ "$CI_RUNNER_DESCRIPTION" == "deployer-ci-cd-2" ]; then
+          ssh $USERNAME_PREPROD@192.168.0.93 "/bin/bash /var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA uat"
+        elif [ "$CI_RUNNER_DESCRIPTION" == "qualif" ]; then
+           ssh $USERNAME_PREPROD@172.16.1.2 "/bin/bash /var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA uat"
+        else
+           ssh $USERNAME_PREPROD@172.16.1.2 "/var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA uat"
+        fi
+  environment:
+    name: uat
+  when: manual
+  only:
+    - uat
+
+deploy_staging:
+  stage: Deploiment STAGING
+  script:
+    - echo "Deploy to staging server"
+    - >
+        if [ "$CI_RUNNER_DESCRIPTION" == "deployer-ci-cd" ]; then
+          ssh $USERNAME_PREPROD@192.168.0.60 "/bin/bash /var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA staging"
+        elif [ "$CI_RUNNER_DESCRIPTION" == "deployer-ci-cd-2" ]; then
+          ssh $USERNAME_PREPROD@192.168.0.93 "/bin/bash /var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA staging"
+        elif [ "$CI_RUNNER_DESCRIPTION" == "qualif" ]; then
+           ssh $USERNAME_PREPROD@172.16.1.2 "/bin/bash /var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA staging"
+        else
+           ssh $USERNAME_PREPROD@172.16.1.2 "/bin/bash /var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA staging"
+        fi
+  environment:
+    name: staging
+  when: manual
+  only:
+    - staging
+
+deploy_prod:
+  stage: Deploiment PRODUCTION
+  script:
+    - echo "Deploy to prod server"
+    - >
+        if [ "$CI_RUNNER_DESCRIPTION" == "deployer-ci-cd" ]; then
+          ssh $USERNAME_PREPROD@192.168.0.60 "/bin/bash /var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA prod"
+        elif [ "$CI_RUNNER_DESCRIPTION" == "deployer-ci-cd-2" ]; then
+          ssh $USERNAME_PREPROD@192.168.0.93 "/bin/bash /var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA prod"
+        elif [ "$CI_RUNNER_DESCRIPTION" == "qualif" ]; then
+           ssh $USERNAME_PREPROD@172.16.1.2 "/bin/bash /var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA prod"
+        else
+           ssh $USERNAME_PREPROD@172.16.1.2 "/bin/bash /var/www/apps/transport-extract/transport_extract.sh $CI_COMMIT_SHA prod"
+        fi
+  environment:
+    name: prod
+  when: manual
+  only:
+    - master

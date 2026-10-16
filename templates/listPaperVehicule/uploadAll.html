@@ -1,0 +1,338 @@
+{% extends "base.html" %}
+{% block title %} CPP-SYSTEM | EXTRACT DATA 
+{% endblock %}
+
+{% block content %}
+<style>
+     @import url(https://fonts.googleapis.com/css?family=Montserrat);
+  #msform {
+    text-align: center;
+    position: relative;
+    margin-top: 30px;
+}
+.center {
+            top: 1050px;
+            left: 50%;
+            transform: translateX(50%);
+        }
+#msform fieldset {
+    background: white;
+    border: 0 none;
+    border-radius: 8px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    padding: 20px 30px;
+    box-sizing: border-box;
+    width: 90%;
+    margin: 0 10%;
+
+    /*stacking fieldsets above each other*/
+    position: relative;
+}
+
+/*Hide all except first fieldset*/
+#msform fieldset:not(:first-of-type) {
+    display: none;
+}
+
+/*inputs*/
+#msform input, #msform textarea {
+    padding: 15px;
+    border: 1px solid #cbcfc9;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: montserrat;
+    color: #2C3E50;
+    font-size: 13px;
+}
+
+#msform input:focus, #msform textarea:focus {
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    box-shadow: none !important;
+    border: 1px solid #2098ce;
+    outline-width: 0;
+    transition: All 0.5s ease-in;
+    -webkit-transition: All 0.5s ease-in;
+    -moz-transition: All 0.5s ease-in;
+    -o-transition: All 0.5s ease-in;
+}
+
+/*buttons*/
+#msform .action-button {
+    width: 100px;
+    background: #2098ce;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+    margin-top: 1%;
+}
+#msform #check {
+    width: 100px;
+    background: #51ce20;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+#msform #nextrecensement{
+    width: 100px;
+    background: #e1040c;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform #terminer_vehicule {
+    width: 100px;
+    background: #e1040c;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+#msform #terminer_paper {
+    width: 100px;
+    background: #e1040c;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+#msform #Pointage {
+    width: 100px;
+    background: #130418;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform .action-button:hover, #msform .action-button:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #2098ce;
+}
+
+#msform .action-button-previous {
+    width: 100px;
+    background: #aCbEd0;
+    font-weight: bold;
+    color: white;
+    border: 0 none;
+    border-radius: 25px;
+    cursor: pointer;
+    padding: 10px 5px;
+    margin: 10px 5px;
+}
+
+#msform .action-button-previous:hover, #msform .action-button-previous:focus {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #aCbEd0;
+}
+
+/*headings*/
+.fs-title {
+    font-size: 18px;
+    text-transform: uppercase;
+    color: #2C3E50;
+    margin-bottom: 10px;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.fs-subtitle {
+    font-weight: normal;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 20px;
+}
+
+/*progressbar*/
+#progressbar {
+    margin-bottom: 30px;
+    overflow: hidden;
+    width: 161%;
+    /*CSS counters to number the steps*/
+    counter-reset: step;
+}
+
+#progressbar li {
+    list-style-type: none;
+    color: #666;
+    text-transform: uppercase;
+    font-size: 9px;
+    width: 33.33%;
+    float: left;
+    position: relative;
+    letter-spacing: 1px;
+}
+
+#progressbar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 24px;
+    height: 24px;
+    line-height: 26px;
+    display: block;
+    font-size: 12px;
+    color: #333;
+    background: white;
+    border-radius: 25px;
+    margin: 0 auto 10px auto;
+}
+
+/*progressbar connectors*/
+#progressbar li:after {
+    content: '';
+    width: 100%;
+    height: 2px;
+    background: white;
+    position: absolute;
+    left: -50%;
+    top: 9px;
+    z-index: -1; /*put it behind the numbers*/
+}
+
+#progressbar li:first-child:after {
+    /*connector not needed before the first step*/
+    content: none;
+}
+
+/*marking active/completed steps blue*/
+/*The number of the step and the connector before it = blue*/
+#progressbar li.active:before, #progressbar li.active:after {
+    background: #2098ce;
+    color: white;
+}
+</style>
+<div class="row">
+    <div class="col-md-4 col-md-offset-3">
+        <form id="msform">
+             <!-- progressbar -->
+             <ul id="progressbar">
+                <li class="active">Insertion files de vehicule</li>
+             
+            </ul>
+            <!-- fieldsets -->
+            <fieldset>
+                <button class="btn btn-danger" type="button" disabled id="loading_btn" style="display: none;">
+                    <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                    Loading...
+                  </button>
+                  <button class="btn btn-success" type="button" disabled id="success_btn" style="display: none;">
+                    <span class="fa fa-check" role="status" aria-hidden="true"></span>
+                    Success...
+                  </button>
+                <div id="gallery" style="display: block;">
+                    <h5><span class="pull-left text-primary">File  vehicule</span></h5>
+                     
+                          <input type="file"  name="file_vehicules" id="file_vehicules1">
+                <div id="gallery" style="display: none;">
+                    <h5><span class="pull-left text-primary">Devant et derriere  du véhicule (G_EXT)</span></h5>
+                     
+                          <input type="file"  name="derriere_vehicule_rar" id="derriere_vehicule1">
+                    <h5><span class="pull-left text-primary">Coté gauche du véhicule (G_EXT_L_XXXX)</span></h5>
+                    
+                        <input type="file" name="gauche_vehicule" id="gauche_vehicule1">
+                    <h5><span class="pull-left text-primary">Coté droite du véhicule (G_EXT_R_XXXX)</span></h5>
+                      
+                         <input type="file"  name="droite_vehicule" id="droite_vehicule1">
+                    <h5> <span class="pull-left text-primary">Intérieur du véhicule (G_EXT_I_XXXX)</span></h5>
+                         <input type="file"  name="interieur_vehicule" id="interieur_vehicule1">
+                    <h5> <span class="pull-left text-primary">Team du véhicule (T_R_XXXX)</span></h5>
+                         <input type="file"  name="team_vehicule" id="team_vehicule1">
+                    <h5> <span class="pull-left text-primary">Papier du véhicule (P_R_XXXX)</span></h5>
+                         <input type="file"  name="papier_vehicule" id="papier_vehicule1">
+                   
+                   </div>
+                
+                    <input type="button" name="next" class="btn-xs action-button pull-right" id="send_files_vehic"style="display:block" value="Envoyer"/>
+            
+                   
+            </fieldset>
+        </form>
+    </div>
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>
+       $( "#send_files_vehic" ).on( "click", function() {
+        
+        let files = new FormData(), // you can consider this as 'data bag'
+        url = 'sendRarFileVehicule';
+        var fileInputs = [
+        document.getElementById('file_vehicules1'),
+        document.getElementById('derriere_vehicule1'),
+        document.getElementById('gauche_vehicule1'),
+        document.getElementById('droite_vehicule1'),
+        document.getElementById('interieur_vehicule1'),
+        document.getElementById('team_vehicule1'),
+        document.getElementById('papier_vehicule1')
+        ];
+        $('#loading_btn').show();
+        document.querySelector('#send_files_vehic').disabled = true;
+        for (var i = 0; i < fileInputs.length; i++) {
+                
+                var fileInput = fileInputs[i];
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                     var filesList = fileInput.files;
+                 
+                // Append each file to the FormData with a unique key (e.g., 'file1', 'file2', etc.)
+                for (var j = 0; j < filesList.length; j++) {
+                    var file = filesList[j];
+                    files.append(fileInput.name, file);
+                }
+                }
+        }
+        $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+            if(response==="1"){
+            //    alert("success");
+               $('#success_btn').show();
+               $('#loading_btn').hide();
+               document.querySelector('#send_files_vehic').disabled = false;
+            //    setTimeout(showSuccessMessageAndReload("Pointage effectué",'Pointage'), 3000);
+              setTimeout(function () {
+                location.reload();
+                }, 2000);
+            }else{
+                alert('Error');
+                document.querySelector('#send_files_vehic').disabled = true;
+                
+            }
+            
+          
+        },
+        error: function (err) {
+            console.log(err);
+          
+        }
+      });
+       });
+
+</script>
+
+{% endblock %}

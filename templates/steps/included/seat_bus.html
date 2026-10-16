@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module Sélection de Sièges - À inclure</title>
+    <style>
+        /* Seat Selection Styles - Module autonome */
+        .seat-selection-module {
+            margin-top: 30px;
+            padding: 25px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 15px;
+            border: 2px solid #e9e7e7;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .seat-section-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 25px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .config-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .config-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+            text-align: center;
+        }
+
+        .config-options {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        .config-btn {
+            padding: 12px 20px;
+            border: 2px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .config-btn:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .config-btn.active {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .custom-config {
+            background: #fff3cd;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #ffc107;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .custom-inputs {
+            display: flex;
+            gap: 15px;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .input-group label {
+            font-size: 14px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .input-group input {
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            width: 150px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ffc107;
+        }
+
+        .apply-btn {
+            padding: 10px 25px;
+            background: #ffc107;
+            color: #333;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+
+        .apply-btn:hover {
+            background: #ffb300;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+        }
+
+        .bus-config-info {
+            text-align: center;
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 15px;
+            font-size: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+        }
+
+        .legend {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        .legend-seat {
+            width: 30px;
+            height: 30px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+        }
+
+        .legend-seat.available {
+            background: #fff;
+        }
+
+        .legend-seat.selected {
+            background: #667eea;
+            border-color: #667eea;
+        }
+
+        .legend-seat.occupied {
+            background: #e74c3c;
+            border-color: #e74c3c;
+        }
+
+        .bus-layout {
+            background: white;
+            border-radius: 15px;
+            padding: 25px 20px;
+            position: relative;
+            min-height: 280px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            overflow-x: auto;
+        }
+
+        .driver {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #34495e 0%, #2c3e50 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .row-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 40px;
+            min-width: fit-content;
+        }
+
+        .seat-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .row-label {
+            font-weight: 600;
+            color: #555;
+            min-width: 100px;
+            font-size: 13px;
+            flex-shrink: 0;
+        }
+
+        .seats-in-row {
+            display: flex;
+            gap: 8px;
+            flex: 1;
+            justify-content: flex-start;
+            flex-wrap: nowrap;
+        }
+
+        .seat {
+            min-width: 60px;
+            width: 60px;
+            height: 55px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 13px;
+            color: #666;
+            flex-shrink: 0;
+        }
+
+        .seat:hover:not(.occupied) {
+            transform: scale(1.1);
+            border-color: #667eea;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .seat.selected {
+            background: #667eea;
+            border-color: #667eea;
+            color: white;
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .seat.occupied {
+            background: #e74c3c;
+            border-color: #e74c3c;
+            color: white;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
+        .seat-summary {
+            margin-top: 20px;
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .summary-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            color: #555;
+            font-size: 14px;
+        }
+
+        .summary-item span:last-child {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .empty-state {
+            text-align: center;
+            color: #999;
+            padding: 60px 20px;
+            font-size: 15px;
+        }
+
+        .empty-state-icon {
+            font-size: 48px;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        @media (max-width: 768px) {
+            .seat-selection-module {
+                padding: 15px;
+            }
+
+            .seat-section-title {
+                font-size: 20px;
+            }
+
+            .config-section {
+                padding: 15px;
+            }
+
+            .bus-layout {
+                padding: 20px 15px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .driver {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+                top: 15px;
+                left: 15px;
+            }
+
+            .row-container {
+                margin-top: 50px;
+            }
+
+            .row-label {
+                min-width: 80px;
+                font-size: 12px;
+            }
+
+            .seat {
+                min-width: 50px;
+                width: 50px;
+                height: 48px;
+                font-size: 11px;
+            }
+
+            .seats-in-row {
+                gap: 6px;
+            }
+
+            .config-options {
+                gap: 8px;
+            }
+
+            .config-btn {
+                padding: 10px 15px;
+                font-size: 13px;
+            }
+
+            .custom-config {
+                padding: 15px;
+            }
+
+            .custom-inputs {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .input-group input {
+                width: 100%;
+            }
+
+            .apply-btn {
+                width: 100%;
+            }
+
+            .legend {
+                gap: 15px;
+            }
+
+            .legend-item {
+                font-size: 12px;
+            }
+
+            .legend-seat {
+                width: 25px;
+                height: 25px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .seat-selection-module {
+                padding: 10px;
+            }
+
+            .bus-layout {
+                padding: 15px 10px;
+            }
+
+            .row-label {
+                min-width: 60px;
+                font-size: 11px;
+            }
+
+            .seat {
+                min-width: 42px;
+                width: 42px;
+                height: 42px;
+                font-size: 10px;
+                border-radius: 6px;
+            }
+
+            .seats-in-row {
+                gap: 5px;
+            }
+
+            .seat-row {
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- MODULE À INCLURE DANS VOTRE SECTION DETAILS -->
+    <div class="seat-selection-module">
+        <div class="seat-section-title">🚌 Sélection des Sièges</div>
+        
+        <div class="config-section">
+            <div class="config-title">Choisir la configuration du bus :</div>
+            <div class="config-options">
+                <button class="config-btn" data-config="3x5">3 × 5</button>
+                <button class="config-btn" data-config="4x5">4 × 5</button>
+                <button class="config-btn" data-config="4x7">4 × 7</button>
+                <button class="config-btn" data-config="5x6">5 × 6</button>
+                <button class="config-btn" data-config="5x9">5 × 9</button>
+                <button class="config-btn active" data-config="custom">✏️ Personnalisé</button>
+            </div>
+        </div>
+
+        <div class="custom-config" id="customConfig">
+            <div class="custom-inputs">
+                <div class="input-group">
+                    <label for="seatsInput">Places par banquette :</label>
+                    <input type="number" id="seatsInput" min="2" max="10" value="4">
+                </div>
+                <div class="input-group">
+                    <label for="rowsInput">Nombre de banquettes :</label>
+                    <input type="number" id="rowsInput" min="1" max="15" value="3">
+                </div>
+                <button class="apply-btn" id="applyBtn">Appliquer</button>
+            </div>
+        </div>
+
+        <div class="bus-config-info" id="busInfo">Configuration: 4 places × 3 banquettes | Total: 12 places</div>
+
+        <div class="legend" style="display: none;">
+            <div class="legend-item">
+                <div class="legend-seat available"></div>
+                <span>Disponible</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-seat selected"></div>
+                <span>Sélectionné</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-seat occupied"></div>
+                <span>Occupé</span>
+            </div>
+        </div>
+
+        <div class="bus-layout">
+            <div class="driver">🚗</div>
+            <div class="row-container" id="rowContainer"></div>
+        </div>
+
+        <div class="seat-summary" style="display:none">
+            <div class="summary-title">📋 Résumé de sélection</div>
+            <div class="summary-item">
+                <span>Places sélectionnées :</span>
+                <span id="selectedSeats">Aucune</span>
+            </div>
+            <div class="summary-item">
+                <span>Nombre de places :</span>
+                <span id="seatCount">0</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration du module de sélection de sièges
+        let seatModuleConfig = {
+            seatsPerRow: 4,
+            numberOfRows: 3
+        };
+
+        const seatModuleState = {
+            selectedSeats: [],
+            occupiedSeats: {} // Sièges occupés par configuration
+        };
+
+        // Initialiser les sièges occupés pour différentes configurations
+        function initOccupiedSeats() {
+            seatModuleState.occupiedSeats = {
+                '3x5': ['1A', '2C', '4B'],
+                '4x5': ['1B', '2D', '3A'],
+                '4x7': ['1C', '3B', '5D', '6A'],
+                '5x6': ['2A', '3E', '4C', '5B'],
+                '5x9': ['1B', '3D', '5E', '7A', '9C']
+            };
+        }
+
+        // Obtenir la clé de configuration actuelle
+        function getConfigKey() {
+            return `${seatModuleConfig.seatsPerRow}x${seatModuleConfig.numberOfRows}`;
+        }
+
+        // Générer les lettres pour les sièges
+        function generateSeatLetters(count) {
+            const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            return letters.substring(0, count).split('');
+        }
+
+        // Initialiser l'affichage des sièges
+        function initSeats() {
+            const container = document.getElementById('rowContainer');
+            container.innerHTML = '';
+
+            const seatLetters = generateSeatLetters(seatModuleConfig.seatsPerRow);
+            const configKey = getConfigKey();
+            const occupiedForConfig = seatModuleState.occupiedSeats[configKey] || [];
+
+            for (let row = 1; row <= seatModuleConfig.numberOfRows; row++) {
+                const rowDiv = document.createElement('div');
+                rowDiv.className = 'seat-row';
+
+                const label = document.createElement('div');
+                label.className = 'row-label';
+                label.textContent = `Banquette ${row}`;
+                rowDiv.appendChild(label);
+
+                const seatsDiv = document.createElement('div');
+                seatsDiv.className = 'seats-in-row';
+
+                for (let i = 0; i < seatModuleConfig.seatsPerRow; i++) {
+                    const seatId = `${row}${seatLetters[i]}`;
+                    const seat = document.createElement('div');
+                    seat.className = 'seat';
+                    seat.textContent = seatId;
+                    seat.dataset.seatId = seatId;
+
+                    if (occupiedForConfig.includes(seatId)) {
+                        seat.classList.add('occupied');
+                    } else {
+                        seat.addEventListener('click', () => toggleSeat(seatId));
+                    }
+
+                    seatsDiv.appendChild(seat);
+                }
+
+                rowDiv.appendChild(seatsDiv);
+                container.appendChild(rowDiv);
+            }
+
+            updateBusInfo();
+        }
+
+        // Basculer la sélection d'un siège
+        function toggleSeat(seatId) {
+            const seatIndex = seatModuleState.selectedSeats.indexOf(seatId);
+            const seatElement = document.querySelector(`[data-seat-id="${seatId}"]`);
+
+            if (seatIndex > -1) {
+                seatModuleState.selectedSeats.splice(seatIndex, 1);
+                seatElement.classList.remove('selected');
+            } else {
+                seatModuleState.selectedSeats.push(seatId);
+                seatElement.classList.add('selected');
+            }
+
+            seatModuleState.selectedSeats.sort();
+            updateSummary();
+        }
+
+        // Mettre à jour les informations du bus
+        function updateBusInfo() {
+            const total = seatModuleConfig.seatsPerRow * seatModuleConfig.numberOfRows;
+            document.getElementById('busInfo').textContent = 
+                `Configuration: ${seatModuleConfig.seatsPerRow} places × ${seatModuleConfig.numberOfRows} banquettes | Total: ${total} places`;
+        }
+
+        // Mettre à jour le résumé
+        function updateSummary() {
+            const selectedSeatsEl = document.getElementById('selectedSeats');
+            const seatCountEl = document.getElementById('seatCount');
+
+            const count = seatModuleState.selectedSeats.length;
+
+            selectedSeatsEl.textContent = count > 0 ? seatModuleState.selectedSeats.join(', ') : 'Aucune';
+            seatCountEl.textContent = count;
+        }
+
+        // Gérer les boutons de configuration prédéfinis
+        document.querySelectorAll('.config-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                // Retirer la classe active de tous les boutons
+                document.querySelectorAll('.config-btn').forEach(b => b.classList.remove('active'));
+                e.target.classList.add('active');
+                const value = e.target.getAttribute('data-config');
+                
+                // Mettre cette valeur dans l'input avec l'ID #config_siege
+                document.querySelector('#config_siege').value = value;
+                const configType = e.target.dataset.config;
+
+                // Afficher/masquer la configuration personnalisée
+                const customConfigDiv = document.getElementById('customConfig');
+                if (configType === 'custom') {
+                    customConfigDiv.style.display = 'block';
+                    return;
+                } else {
+                    customConfigDiv.style.display = 'none';
+                }
+
+                // Parser la configuration
+                const config = configType.split('x');
+                seatModuleConfig.seatsPerRow = parseInt(config[0]);
+                seatModuleConfig.numberOfRows = parseInt(config[1]);
+
+                // Réinitialiser les sélections
+                seatModuleState.selectedSeats = [];
+
+                // Réinitialiser l'affichage
+                initSeats();
+                updateSummary();
+            });
+        });
+
+        // Gérer l'application de la configuration personnalisée
+        document.getElementById('applyBtn').addEventListener('click', () => {
+            const seatsInput = parseInt(document.getElementById('seatsInput').value);
+            const rowsInput = parseInt(document.getElementById('rowsInput').value);
+
+            // Valider les entrées
+            if (seatsInput < 2 || seatsInput > 10) {
+                alert('⚠️ Le nombre de places par banquette doit être entre 2 et 10');
+                return;
+            }
+            if (rowsInput < 1 || rowsInput > 15) {
+                alert('⚠️ Le nombre de banquettes doit être entre 1 et 15');
+                return;
+            }
+
+            // Appliquer la configuration personnalisée
+            seatModuleConfig.seatsPerRow = seatsInput;
+            seatModuleConfig.numberOfRows = rowsInput;
+
+            // Réinitialiser les sélections
+            seatModuleState.selectedSeats = [];
+
+            // Réinitialiser l'affichage
+            initSeats();
+            updateSummary();
+            $('#config_siege').val(seatsInput+"×"+rowsInput);
+            // alert(`✅ Configuration personnalisée appliquée: ${seatsInput} × ${rowsInput}`);
+        });
+
+        // Fonction pour obtenir les sièges sélectionnés (à utiliser dans votre fonction save_vehicule)
+        function getSelectedSeats() {
+            return {
+                configuration: getConfigKey(),
+                selectedSeats: seatModuleState.selectedSeats,
+                totalSelected: seatModuleState.selectedSeats.length
+            };
+        }
+
+        // Rendre la fonction disponible globalement
+        window.getSelectedSeats = getSelectedSeats;
+
+        // Initialisation au chargement
+        initOccupiedSeats();
+        initSeats();
+        updateSummary();
+    </script>
+</body>
+</html>

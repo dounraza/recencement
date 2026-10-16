@@ -1,0 +1,248 @@
+   <!--prop-->
+   <!-- <div id="proprietaireForm"style="display: none;">
+    <h5><span class="text-primary">Photo</span></h5>
+                <div class="container">
+                    <div class="row align-items-start">
+                                    <center>
+                                    <div class="col-4">
+                                        <img id="photo_pr" alt="Profils" width="100" height="100" />
+                                        <input type="file"  onchange="document.getElementById('photo_pr').src = window.URL.createObjectURL(this.files[0])" name="photo_pr" id="photo_pr1">
+
+                                    </div>
+                                    </center>
+                                    <input type="text" name="nom_prop" id="nom_prop" placeholder="Nom  Propriétaire">
+                                    <input type="text" name="prenom_prop" id="prenom_prop" placeholder="Prénom Propriétaire">
+                                    <input type="text" name="tel_prop" id="tel_prop" placeholder="Tel.">
+                </div>  
+                                <h5><span class="text-primary">CIN</span></h5>
+                                <div class="container">
+                                    <div class="row align-items-start">
+                                    <div class="col">
+                                        <img id="cin_p_g" alt="cin recto" width="100" height="100" />
+                                        <input type="file" onchange="document.getElementById('cin_p_g').src = window.URL.createObjectURL(this.files[0])" name="cin_p_recto" id="cin_p_recto1">
+
+                                    </div>
+                                    <div class="col">
+                                        <img id="cin_p_v" alt="cin verso" width="100" height="100" />
+                                        <input type="file" onchange="document.getElementById('cin_p_v').src = window.URL.createObjectURL(this.files[0])" name="cin_p_verso" id="cin_p_verso1">
+                                    </div>
+                                    </div>
+                                </div>   
+                                  
+                                </div> 
+    </div>  -->
+    <div id="proprietaireForm" style="display: none;">
+        
+       
+        <div class="container">
+            <h5 class="text-primary text-center" style="font-size:22px;font-weight: bold;"><span>CREATION PROPRIETAIRE</span></h5>
+         <div class="row">
+           <div class="col-md-12" align="center">
+             <div class="image-placeholder" id="imagePreview">
+                        <img id="photo_pr" src="{{photo_pr}}" alt="Profils" width="100" height="100" />
+             </div><br>
+             <input type="file" onchange="previewImage(this)" name="photo_pr" id="photo_pr1"><br>
+         </div>
+         </div>
+         </div><br>
+
+         <div class="form-group">
+            <input type="hidden" class="form-control" name="plaque_im" id="plaque_im" value="{{bus}}">
+            <input type="hidden" class="form-control" name="vals_prop" id="vals_prop" value="proprietaire">
+          
+            <input type="text" class="form-control" name="nom_prop" id="nom_prop" placeholder="Nom Propriétaire" value="{{nom_proprio}}">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="prenom_prop" id="prenom_prop" placeholder="Prénom Propriétaire" value="{{pnom_proprio}}">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="tel_prop" id="tel_prop" placeholder="Telephone" value="{{tel_prop}}">
+        </div>
+       
+        <div class="form-group">
+            <input type="text" class="form-control" name="cin_prop" id="cin_prop" placeholder="N° Carte d'Identité National ">
+
+            <input type="hidden" name="recencement_team_p"id="recencement_team_p" value="oui">
+        </div>
+        
+        
+        
+        <h5><span class="text-primary">CIN</span></h5>
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <div class="image-placeholder">
+                    <img id="cin_p_recto" src="{{cin_p_recto}}"  alt="cin recto" width="100" height="100" /><br>
+                </div><br>
+                <input type="file" onchange="previewImage(this)" name="cin_p_recto" id="cin_p_recto1">
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="image-placeholder">
+                    <img id="cin_p_verso"src="{{cin_p_verso}}"  alt="cin verso" width="100" height="100" />
+                <br>
+                </div><br>
+                <input type="file" onchange="previewImage(this)" name="cin_p_verso" id="cin_p_verso1">
+            </div>
+           
+        </div><br><br>
+        <a href="#" class="btn btn-danger btn-block" id="terminer_prop" onclick="save_data_prop()">Save Changes</a>
+        <!-- Overlay de chargement -->
+   <div id="loadingOverlayP">
+       <div class="loading-content">
+           <h3>Chargement en cours ...</h3>
+           <i class="fa fa-spinner fa-spin fa-3x"></i>
+       </div>
+   </div>
+      
+    </div>
+    <script>
+         function save_data_prop(){
+        var role=$('#vals_prop').val();
+        nom="#";
+        prenom="#";
+        tel="#"
+        
+        let busInputs = document.querySelectorAll("#busList input[name='bus[]']");
+        let busValues = Array.from(busInputs).map(input => input.value);
+        if(role==="chauffeur"){
+            nom=$('#nom_chauffeur').val();
+            busList= busValues;
+            status=$('#status').val(); 
+            anne_exp=$('#anne_exp').val(); 
+            prenom=$('#prenom_chauffeur').val();
+            tel=$('#tel_chauffeur').val();
+        }
+        if(role==="receveur"){
+            nom=$('#nom_receveur').val();
+            busList= busValues;
+            status=$('#status').val(); 
+            anne_exp=$('#anne_exp').val(); 
+            prenom=$('#prenom_receveur').val();
+            tel=$('#tel_receveur').val();
+        }
+           
+        if(role==="proprietaire"){
+            nom=$('#nom_prop').val();
+            busList="";
+            status=$('#status').val(); 
+            anne_exp=$('#anne_exp').val(); 
+            prenom=$('#prenom_prop').val();
+            tel=$('#tel_prop').val();
+            cin_prop=$('#cin_prop').val();
+        }
+        let files = new FormData(); // you can consider this as 'data bag'
+        url = '/sendTeamVehicule';
+        const badge_ch = document.getElementById('badge_ch');
+        const photo_c = document.getElementById('photo_ch1');
+        const photo_r = document.getElementById('photo_rc');
+        const photo_p = document.getElementById('photo_pr');
+        const cin_g = document.getElementById('cin_g');
+        const cin_r_g = document.getElementById('cin_r_g');
+        const cin_v = document.getElementById('cin_v');
+        const cin_r_v = document.getElementById('cin_r_v');
+        const permis_v = document.getElementById('permis_v');
+        const permis_r_v = document.getElementById('permis_r_v');
+        const permis_g = document.getElementById('permis_g');
+        const permis_r_g = document.getElementById('permis_r_g');
+
+
+
+
+    var fileInputs = [
+            document.getElementById('cin_recto1'),
+            document.getElementById('photo_ch1'),
+            document.getElementById('badge_ch1'),
+            document.getElementById('photo_rc1'),
+            document.getElementById('photo_pr1'),
+            document.getElementById('photo_ch1cin_verso1'),
+            document.getElementById('permis_verso1'),
+            document.getElementById('permis_recto1'),
+
+            document.getElementById('cin_r_recto1'),
+            document.getElementById('cin_r_verso1'),
+            document.getElementById('permis_r_recto1'),
+            document.getElementById('permis_r_verso1')
+            // Add more file input elements as needed
+            ];
+            for (var i = 0; i < fileInputs.length; i++) {
+                
+                var fileInput = fileInputs[i];
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                     var filesList = fileInput.files;
+                // Append each file to the FormData with a unique key (e.g., 'file1', 'file2', etc.)
+                for (var j = 0; j < filesList.length; j++) {
+                    var file = filesList[j];
+                    files.append(fileInput.name, file);
+                    
+                }
+                }
+             }
+        
+        plaque=$('#plaque_im').val();
+        userid=$('#userid').val();
+        username=$('#username').val();
+        files.append('userid',userid);
+        files.append('username',username);
+        files.append('role',role);
+        files.append('nom',nom);
+        files.append('prenom',prenom);
+        files.append('tel',tel);
+        files.append('plaque',plaque);
+        files.append('busList',busList);
+        files.append('status',status);
+        files.append('anne_exp',anne_exp);
+        files.append('cin_prop',cin_prop);
+        
+        document.getElementById('loadingOverlayP').style.display = 'flex';
+
+        $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+            // $('#spinnteam').hide();
+            console.log(response);
+            // setTimeout(showSuccessMessageAndReload(response,'Preposé'), 3000);
+            alert("Données envoyées avec succès !");
+            // setTimeout(showSuccessMessageAndReload(response,'Preposé'), 3000);
+            document.getElementById('loadingOverlayP').style.display = 'none';
+            cin_g.src = '';
+            cin_r_g.src = '';
+            cin_v.src = '';
+            cin_r_v.src = '';
+            permis_v.src = '';
+            permis_r_v.src = '';
+            permis_g.src = '';
+            permis_r_g.src = '';
+            photo_c.src="";
+            photo_r.src="";
+            photo_p.src="";
+            badge_ch.src="";
+            
+            document.getElementById('badge_ch1').value = '';
+            document.getElementById('photo_ch1').value = '';
+            document.getElementById('cin_recto1').value = '';
+            document.getElementById('cin_verso1').value = '';
+            document.getElementById('permis_verso1').value = '';
+            document.getElementById('permis_recto1').value = '';
+
+            document.getElementById('cin_r_recto1').value = '';
+            document.getElementById('cin_r_verso1').value = '';
+            document.getElementById('permis_r_recto1').value = '';
+            document.getElementById('permis_r_verso1').value = '';
+
+            document.getElementById('cin_p_recto1').value = '';
+            document.getElementById('cin_p_verso1').value = '';
+        
+           
+          
+        },
+        error: function (err) {
+            console.log(err);
+            alert("Erreur lors de l’envoi des données.");
+            document.getElementById('loadingOverlayP').style.display = 'none';
+        }
+    });
+    }
+    </script>

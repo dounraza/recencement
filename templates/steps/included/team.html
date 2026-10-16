@@ -1,0 +1,122 @@
+<style>
+    .job-card {
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        padding: 15px;
+        background: #fff;
+        box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+        margin-bottom: 20px;
+    }
+    .job-card .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .job-card .header img {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+    }
+    .job-card .badge {
+        background-color: #ffcc00;
+        color: #333;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+    }
+    .job-card .title {
+        font-size: 16px;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    .progress {
+        height: 6px;
+        margin: 10px 0;
+    }
+    .capacity {
+        font-size: 12px;
+        color: #777;
+    }
+</style>
+<fieldset>
+    <div class="spinner-border text-danger" id="spinnteam"role="status" style="display:none">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+      <div id="succesteam" class="text-success" style="display: none;">Ajouté avec succès!</div>
+    <h2 class="fs-title">Team</h2>
+    <!-- <h3 class="fs-subtitle">Les préposé des véhicules</h3> -->
+   
+    <!-- <div class="row align-items-start">
+        <input type="hidden" id="vals" value="">
+        <div class="col">
+            <label for="chauffeur">PROPRIETAIRE</label>
+            <input type="checkbox"onclick="showdomchauffeur(this)" name="proprietaire" id="proprietaire" value="proprietaire" class="valuecheck"> 
+        </div>
+        <div class="col">
+            <label for="chauffeur">CHAUFFEUR</label>
+            <input type="checkbox" onclick="showdomchauffeur(this)" name="chauffeur" id="chauffeur" value="chauffeur" class="valuecheck">
+        </div>
+        <div class="col">
+            <label for="chauffeur">RECEVEUR</label>
+            <input type="checkbox"onclick="showdomchauffeur(this)" name="receveur" id="receveur" value="receveur" class="valuecheck"> 
+        </div>
+      
+    </div> -->
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="job-card">
+                    <div class="header">
+                        <div><strong><i class="fa fa-user-tie"></i> PROPRIETAIRE</strong> <br><span class="text-muted">cpp-transport</span></div>
+                        <!-- <span class="badge" onclick="showForm('proprio')">Voir le formulaire</span> -->
+                    </div>
+                    <div class="title">Collecter les informations personnelles et professionnelles des propriétaires.
+                    </div>
+                    <!-- <div class="progress">
+                        <div class="progress-bar progress-bar-danger" style="width: 60%;"></div>
+                    </div>
+                    <div class="capacity">18/02/2025</div> -->
+                    <a href="#" class="badge" onclick="showForm('proprio')"><i class="fa fa-plus"></i>Voir le formulaire</a>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="job-card">
+                    <div class="header">
+                        <div><strong>CHAUFFEUR</strong> <br><span class="text-muted">cpp-transport</span></div>
+                        <!-- <span class="badge" style="background-color: orange;" onclick="showForm('chauffeur')">Voir le formulaire</span> -->
+                    </div>
+                    <div class="title">Collecter les informations personnelles et professionnelles des chauffeurs.</div>
+                    <!-- <div class="progress">
+                        <div class="progress-bar progress-bar-danger" style="width: 50%;"></div>
+                    </div>
+                    <div class="capacity">18/02/2025</div> -->
+                    <a href="#" class="badge" onclick="showForm('chauffeur')">Voir le formulaire</a>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="job-card">
+                    <div class="header">
+                        <div><strong>RECEVEUR</strong> <br><span class="text-muted">cpp-transport</span></div>
+                        
+                    </div>
+                    <div class="title">Collecter les informations personnelles et professionnelles des receveurs.</div>
+                    <a href="#" class="badge" onclick="showForm('receveur')">Voir le formulaire</a>
+                    <!-- <div class="progress">
+                        <div class="progress-bar progress-bar-danger" style="width: 52%;"></div>
+                    </div>
+                    <div class="capacity">18/02/2025</div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- <a href="#"  class="btn btn-xs btn-danger" id="terminer" >Terminer</a> -->
+    {%include 'steps/included/chauffeur_form.html'%}
+    {%include 'steps/included/receveur_form.html'%}
+    {%include 'steps/included/proprio_form.html'%}
+                    <!-- <button class="btn btn-warning"><b>RECEVEUR</b></button>  -->
+   
+   
+    <!-- <input type="button" name="previous" class="previous action-button-previous" value="Precèdent"/> -->
+    <input type="submit" name="submit" class="submit action-button" id="terminer" style="display:none" value="Envoyer"/>
+    <!-- <a href="#"  class="btn btn-xs btn-danger" id="terminer" >Terminer</a> -->
+</fieldset>

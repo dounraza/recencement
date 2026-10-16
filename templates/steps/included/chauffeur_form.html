@@ -1,0 +1,333 @@
+<div class="container">
+   
+    
+    <div id="chauffeurForm" class="form-container" style="display: none;">
+
+        <h5 class="text-primary text-center" style="font-size:22px;font-weight: bold;"><span>CREATION CHAUFFEUR</span></h5>
+           <div class="container">
+            <div class="row">
+              <div class="col-md-12" align="center">
+                <div class="image-placeholder" id="imagePreview">
+                    <img id="photo_ch" src="{{photo_chauffeur}}"class="photo-preview" alt="Profil"  width="100" height="100" /><br>
+                </div><br>
+                <input type="file" onchange="previewImage(this)" name="photo_ch" id="photo_ch1">
+            </div>
+            </div>
+            </div>
+        <br>
+
+        <div class="form-group">
+         
+
+            <input type="hidden" class="form-control" name="plaque_im" id="plaque_im" value="{{bus}}">
+            <input type="hidden" class="form-control" name="vals" id="vals" value="chauffeur">
+            <input type="text" class="form-control" name="nom_chauffeur" id="nom_chauffeur" value="{{nom_chf}}" placeholder="Nom chauffeur">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="prenom_chauffeur"value="{{prenom_chf}}" id="prenom_chauffeur" placeholder="Prénom chauffeur">
+        </div>
+        <div class="form-group">
+            <input type="text" class="form-control" name="tel_chauffeur" value="{{tel_chf}}"id="tel_chauffeur" placeholder="Téléphone">
+        </div>
+        <div class="form-group">
+            
+            <select name="anne_exp" id="anne_exp" class="form-control">
+                <option value="---">Vos Expérience en tant que chauffeur </option>
+                <option value="-6mois">moin 6 mois</option>
+                <option value="-1ans">moin 1  ans</option>
+                <option value="1ans">1  ans</option>
+                <option value="2ans">2  ans</option>
+                <option value="3ans">3  ans</option>
+                <option value="4ans">4  ans</option>
+                <option value="5ans">5  ans</option>
+                <option value="6ans">6  ans</option>
+                <option value="7ans">7  ans</option>
+                <option value="8ans">8  ans</option>
+                <option value="9ans">9  ans</option>
+                <option value="10ans">10  ans</option>
+                <option value="+10ans">plus de 10  ans</option>
+                <option value="+20ans">plus de 20  ans</option>
+                
+            </select>
+        </div>
+        <div class="form-group">
+            <select name="status" id="status" class="form-control" onchange="toggleBusInput()">
+                <option value="---">Chauffeur Titulaire ou  Remplaçant ?</option>
+                <option value="Titulaire">Titulaire</option>
+                <option value="Remplaçant">Remplaçant</option>
+            </select>
+        </div>
+        <div id="busContainer" class="hidden">
+            <h4 class="text-primary">Ajoutez les bus du remplaçant</h4>
+            <div id="busList" class="bus-list"></div>
+            <button type="button" class="btn btn-success" onclick="addBus()">Ajouter un bus</button>
+        </div>
+        <h3 class="text-primary">CIN</h3>
+
+        <div class="row">
+            <!-- CIN Recto -->
+            <div class="col-md-6 text-center">
+                <div class="image-placeholder">
+                    <img id="cin_recto" src="{{cin_r}}" class="photo-preview" alt="CIN Recto" width="100" height="100" />
+                </div>
+                <br>
+                <input type="file" onchange="previewImage(this)" name="cin_recto" id="cin_recto1">
+            </div>
+
+            <!-- CIN Verso -->
+            <div class="col-md-6 text-center">
+                <div class="image-placeholder">
+                    <img id="cin_verso" src="{{cin_v}}"class="photo-preview" alt="CIN Verso" width="100" height="100" />
+                </div>
+                <br>
+                <input type="file" onchange="previewImage(this)" name="cin_verso" id="cin_verso1">
+            </div>
+        </div>
+
+
+        <h3 class="text-primary">PERMIS</h3>
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <div class="container">
+                    <div class="row">
+                      
+                        <div class="image-placeholder" id="imagePreview">
+                
+                            <img id="permis_recto" src="{{Permis_r}}"class="photo-preview" alt="Permis Recto"width="100" height="100" /><br>
+                            </div>
+                <input type="file" onchange="previewImage(this)" name="permis_recto" id="permis_recto1"><br>
+                
+            </div>
+            </div>
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="container">
+                    <div class="row">
+                    
+                        <div class="image-placeholder" id="imagePreview">
+                <img id="permis_verso" src="{{Permis_v}}" class="photo-preview" alt="Permis Verso" width="100" height="100" /><br>
+                        </div>
+                <input type="file" onchange="previewImage(this)" name="permis_verso" id="permis_verso1"><br>
+                
+                </div>
+                </div>
+            </div>
+        </div><br>
+        <h3 class="text-primary">BADGE</h3>
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <div class="container">
+                    <div class="row">
+                     
+                        <div class="image-placeholder" id="imagePreview">
+                
+                            <img id="badge_ch" src="{{Badge_C}}"class="photo-preview" alt="vos badge"width="100" height="100" /><br>
+                            </div><br>
+                <input type="file" onchange="previewImage(this)" name="badge_ch" id="badge_ch1"><br>
+               
+            </div>
+            </div>
+            </div>
+            <input type="hidden" name="recencement_team"id="recencement_team" value="oui">
+        </div><br>
+     
+         <a href="#" class="btn btn-danger btn-block" id="terminer_chauffeur" onclick="save_data_prepose()">Save Changes</a>
+         <!-- Overlay de chargement -->
+        <div id="loadingOverlay">
+            <div class="loading-content">
+                <h3>Chargement en cours ...</h3>
+                <i class="fa fa-spinner fa-spin fa-3x"></i>
+            </div>
+        </div>
+    </div>
+   
+</div>
+<script>
+     function toggleBusInput() {
+        var status = document.getElementById("status").value;
+        var busContainer = document.getElementById("busContainer");
+
+        if (status === "Remplaçant") {
+            busContainer.classList.remove("hidden");
+        } else {
+            busContainer.classList.add("hidden");
+            document.getElementById("busList").innerHTML = ""; // Réinitialiser la liste des bus
+        }
+    }
+    function addBus() {
+        var busList = document.getElementById("busList");
+
+        var div = document.createElement("div");
+        div.className = "input-group bus-entry";
+        div.style.marginBottom = "10px";
+
+        var input = document.createElement("input");
+        input.type = "text";
+        input.name = "bus[]";
+        input.className = "form-control";
+        input.placeholder = "Immatriculation du bus";
+
+        var span = document.createElement("span");
+        span.className = "input-group-btn";
+
+        var removeBtn = document.createElement("button");
+        removeBtn.type = "button";
+        removeBtn.className = "btn btn-danger";
+        removeBtn.innerHTML = "Supprimer";
+        removeBtn.onclick = function() {
+            busList.removeChild(div);
+        };
+
+        span.appendChild(removeBtn);
+        div.appendChild(input);
+        div.appendChild(span);
+        busList.appendChild(div);
+    }
+    function save_data_prepose(){
+        var role=$('#vals').val();
+        nom="#";
+        prenom="#";
+        tel="#"
+        
+        let busInputs = document.querySelectorAll("#busList input[name='bus[]']");
+        let busValues = Array.from(busInputs).map(input => input.value);
+        if(role==="chauffeur"){
+            nom=$('#nom_chauffeur').val();
+            busList= busValues;
+            status=$('#status').val(); 
+            anne_exp=$('#anne_exp').val(); 
+            prenom=$('#prenom_chauffeur').val();
+            tel=$('#tel_chauffeur').val();
+        }
+        if(role==="receveur"){
+            nom=$('#nom_receveur').val();
+            busList= busValues;
+            status=$('#status').val(); 
+            anne_exp=$('#anne_exp').val(); 
+            prenom=$('#prenom_receveur').val();
+            tel=$('#tel_receveur').val();
+        }
+           
+        if(role==="proprietaire"){
+            nom=$('#nom_prop').val();
+            busList="";
+            status=$('#status').val(); 
+            anne_exp=$('#anne_exp').val(); 
+            prenom=$('#prenom_prop').val();
+            tel=$('#tel_prop').val();
+        }
+        let files = new FormData(); // you can consider this as 'data bag'
+        url = '/sendTeamVehicule';
+        const badge_ch = document.getElementById('badge_ch');
+        const photo_c = document.getElementById('photo_ch1');
+        const photo_r = document.getElementById('photo_rc');
+        const photo_p = document.getElementById('photo_pr');
+        const cin_g = document.getElementById('cin_g');
+        const cin_r_g = document.getElementById('cin_r_g');
+        const cin_v = document.getElementById('cin_v');
+        const cin_r_v = document.getElementById('cin_r_v');
+        const permis_v = document.getElementById('permis_v');
+        const permis_r_v = document.getElementById('permis_r_v');
+        const permis_g = document.getElementById('permis_g');
+        const permis_r_g = document.getElementById('permis_r_g');
+
+
+
+
+    var fileInputs = [
+            document.getElementById('cin_recto1'),
+            document.getElementById('photo_ch1'),
+            document.getElementById('badge_ch1'),
+            document.getElementById('photo_rc1'),
+            document.getElementById('photo_pr1'),
+            document.getElementById('photo_ch1cin_verso1'),
+            document.getElementById('permis_verso1'),
+            document.getElementById('permis_recto1'),
+
+            document.getElementById('cin_r_recto1'),
+            document.getElementById('cin_r_verso1'),
+            document.getElementById('permis_r_recto1'),
+            document.getElementById('permis_r_verso1')
+            // Add more file input elements as needed
+            ];
+            for (var i = 0; i < fileInputs.length; i++) {
+                
+                var fileInput = fileInputs[i];
+                if (fileInput && fileInput.files && fileInput.files.length > 0) {
+                     var filesList = fileInput.files;
+                // Append each file to the FormData with a unique key (e.g., 'file1', 'file2', etc.)
+                for (var j = 0; j < filesList.length; j++) {
+                    var file = filesList[j];
+                    files.append(fileInput.name, file);
+                    
+                }
+                }
+             }
+        
+        plaque=$('#plaque_im').val();
+        userid=$('#userid').val();
+        username=$('#username').val();
+        files.append('userid',userid);
+        files.append('username',username);
+        files.append('role',role);
+        files.append('nom',nom);
+        files.append('prenom',prenom);
+        files.append('tel',tel);
+        files.append('plaque',plaque);
+        files.append('busList',busList);
+        files.append('status',status);
+        files.append('anne_exp',anne_exp);
+        document.getElementById('loadingOverlay').style.display = 'flex';
+
+        $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+            // $('#spinnteam').hide();
+            console.log(response);
+            // setTimeout(showSuccessMessageAndReload(response,'Preposé'), 3000);
+            alert("Données envoyées avec succès !");
+            // setTimeout(showSuccessMessageAndReload(response,'Preposé'), 3000);
+            document.getElementById('loadingOverlay').style.display = 'none';
+            cin_g.src = '';
+            cin_r_g.src = '';
+            cin_v.src = '';
+            cin_r_v.src = '';
+            permis_v.src = '';
+            permis_r_v.src = '';
+            permis_g.src = '';
+            permis_r_g.src = '';
+            photo_c.src="";
+            photo_r.src="";
+            photo_p.src="";
+            badge_ch.src="";
+            
+            document.getElementById('badge_ch1').value = '';
+            document.getElementById('photo_ch1').value = '';
+            document.getElementById('cin_recto1').value = '';
+            document.getElementById('cin_verso1').value = '';
+            document.getElementById('permis_verso1').value = '';
+            document.getElementById('permis_recto1').value = '';
+
+            document.getElementById('cin_r_recto1').value = '';
+            document.getElementById('cin_r_verso1').value = '';
+            document.getElementById('permis_r_recto1').value = '';
+            document.getElementById('permis_r_verso1').value = '';
+
+            document.getElementById('cin_p_recto1').value = '';
+            document.getElementById('cin_p_verso1').value = '';
+        
+           
+          
+        },
+        error: function (err) {
+            console.log(err);
+            alert("Erreur lors de l’envoi des données.");
+            document.getElementById('loadingOverlay').style.display = 'none';
+        }
+    });
+    }
+</script>

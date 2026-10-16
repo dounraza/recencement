@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facture</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        .invoice {
+            border: 1px solid #ccc;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .invoice header {
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .invoice section {
+            margin-bottom: 20px;
+        }
+
+        .invoice table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .invoice th, .invoice td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .invoice footer {
+            text-align: right;
+        }
+        .invoice header .company-info {
+            text-align: right;
+        }
+
+        .invoice header img {
+            max-width: 150px; /* Ajustez la largeur du logo selon vos besoins */
+            height: auto;
+        }
+        .invoice footer .conditions-generales {
+            margin-top: 20px;
+            text-align: left;
+
+        }
+        .invoice footer img {
+            max-width: 100%; /* Ajustez la largeur de l'image selon vos besoins */
+            height: auto;
+            margin-top: 10px;
+            text-align: right;
+        }
+       
+        /* .invoice footer .lien-paiement {
+            margin-top: 20px;
+            text-align: left;
+            width: 100%;
+        } */
+        .invoice footer .lien-paiement {
+            margin-top: 20px;
+            text-align: center;
+            width: 100%;
+            display: flex;
+            justify-content: space-around; /* Ajustez l'espacement horizontal entre les images */
+        }
+
+        
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <h1 align="center">Facture 00/100212/3320</h1>
+        <header>
+            
+            <img src="https://qacseafile.cpp-system.com/pictures?xys=Cpp-Transport/test|Iiilxvi69aStddYM2dBD.png" alt="Logo de l'entreprise">
+          
+            <div class="company-info">
+                <p>Nom de l'entreprise: [Nom de l'entreprise]</p>
+                <p>Adresse de l'entreprise: [Adresse de l'entreprise]</p>
+                <p>Téléphone de l'entreprise: [Téléphone de l'entreprise]</p>
+                <p>Date: [Date de la facture]</p>
+                <!-- Ajoutez d'autres informations de l'entreprise si nécessaire -->
+            </div>
+           
+        </header>
+
+        <section>
+            <h2>Informations du client</h2>
+            <p>Nom du client: [Nom du client]</p>
+            <p>Adresse: [Adresse du client]</p>
+            <p>Email: [Adresse mail du client]</p>
+            <p>Tel: [Tel du client]</p>
+            <!-- Ajoutez d'autres informations du client si nécessaire -->
+        </section>
+
+        <section>
+            <h2>Détails de la facture</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th>Nb opération</th>
+                        <th>Montant en Ariary</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Ajoutez des lignes pour chaque article de la facture -->
+                    <tr>
+                        <td>Post Payment le mois de decembre</td>
+                        <td>12/2023</td>
+                        <td>300</td>
+                        <td>2003332</td>
+                    </tr>
+                    <!-- Ajoutez d'autres lignes si nécessaire -->
+                </tbody>
+            </table>
+        </section>
+
+        <footer>
+            <p>Sous-Total HT : $[Montant total]</p>
+            <p>TVA 20% de $[Montant total] : $[ttc]</p>
+            <p><b>Total à payer : $[Montant total]+$[ttc]</b></p>
+              <!-- Conditions générales -->
+              <div class="conditions-generales">
+                <h2>Conditions Générales</h2>
+                <p>Les Facture  doit être payée dans un delai de 30 jours après sa date d'emmission.En cas de retard de paiement,les penalités
+                    de retard s'élèvent à 10% du montant total à payer de la facture.</p>
+                <!-- Ajoutez le texte des conditions générales selon vos besoins -->
+            </div>
+            <!-- Lien de paiement -->
+          <hr/>
+            <div class="row">
+            <div class="lien-paiement">
+                <img src="https://qacseafile.cpp-system.com/pictures?xys=Cpp-Transport/test|czwG05JncxGuBm0JOQ7X.png" width="70"height="20" alt="Image dans le pied de page"><br/>
+
+                <img src="https://qacseafile.cpp-system.com/pictures?xys=Cpp-Transport/test|4DOMxN4bSqWUEB0hhftj.jpg" width="40"height="20" alt="Image dans le pied de page">
+              
+            </div>
+            <!-- <p style="margin-top: 0em;text-align: left;"><b>Payer en ligne.</b><br/> Via le lien <a href="https://qapay.cpp-system.com">https://qapay.cpp-system.com</a> Ou Scannez le QRCode!</p> -->
+            <p style="margin-top: -3em;margin-right: 5em;;text-align: right;"><a href="https://qapay.cpp-system.com">&copy Cpp-system</a></p>
+              
+        </div>
+        </footer>
+    </div>
+</body>
+</html>

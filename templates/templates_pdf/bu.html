@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+   body {
+            margin: 20px;
+        }
+        h6{font-size:1em;}
+        .invoice {
+            width: 100%;
+            height: 100%;
+            max-height: 1600px;
+            max-width: 1200px; /* Ajustez la largeur maximale selon vos besoins */
+            margin: 0 auto;
+            padding: 120px;
+            border: 1px solid #f5f5f5;
+        }
+
+        .invoice h2 {
+            text-align: center;
+        }
+
+        .invoice img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .company-info {
+            line-height: 1;
+        }
+
+        .customer-info p {
+            margin-bottom: 0.5rem;
+        }
+
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .total {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        .conditions-generales {
+            margin-top: 20px;
+        }
+
+        .lien-paiement img {
+            margin-top: 10px;
+        }
+        table,th,td{
+        border:1px solid #ddd;
+    
+    }
+    th,td{
+        font-size:13px;
+        padding:0px;
+        text-align: center;
+    }
+    .invoice table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .invoice th, .invoice td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .invoice footer {
+            text-align: justify;
+        }
+        .invoice footer .cc_info{
+            line-height: 1;
+        }
+        
+        .invoice footer .conditions-generales {
+            margin-top: 10px;
+            text-align: left;
+
+        }
+        .customer_info {
+            line-height: 1;
+        }
+       
+    .theme td{
+        border-color:white ;
+    }
+    
+  </style>
+</head>
+<body>
+ 
+        <div class="invoice">
+                <h1 align="center"><b>Facture {{ref}} </b></h1>
+             <br>
+             <br>
+             <br>
+             <br>
+                <header class="row col-md-9" align="right">
+                    <div class="col-md-6">
+                        <div  >
+                            <img src="{{url_image}}" alt="Logo de votre entreprise"  class="img-fluid me-6" width="200"height="300" align="left" style="margin-top:3em">
+                            <h4 >Nom de l'entreprise: {{company}}</h4>
+                        </div>
+                        <div>
+                            <p>Téléphone de l'entreprise: {{phone_company}} </p>
+                            <p >Adresse de l'entreprise: {{phone_company}} </p>
+                            <p >Email: {{email_company}} </p>
+                            <p >Date de la facture : {{date_emis}} </p>
+                            
+                        </div>
+                    </div>
+                </header>
+                <hr>
+             <br>
+              
+                <section>
+                    <h2><b>Informations du client</b></h2>
+                    <br>
+                    <div class="customer_info">
+                        <p>Nom du client:{{partner}}</p>
+                        <p>NIF/STAT: [nif du client] / [stat du client]  </p>
+                        <p>Email: {{partner_email}}</p>
+                        <p>Tel: {{partner_phone}}</p>
+                    </div>
+                    <!-- Ajoutez d'autres informations du client si nécessaire -->
+                </section>
+           <hr/>
+           
+                <section>
+            <br>
+            
+                    <h2><b>Détails de la facture </b></h2>
+                    <br>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Période</th>
+                                <th>Nb opération</th>
+                                <th>Status</th>
+                                <th>Montant en Ariary</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Ajoutez des lignes pour chaque article de la facture -->
+                            <tr>
+                                <td>Post Payment le mois de {{month}}</td>
+                                <td>{{month}}/{{year}}</td>
+                                <td>{{total_operation}}</td>
+                                <td>{{status}}</td>
+                                <td>{{amount}}</td>
+                            </tr>
+                          
+                          
+                            <tr class="theme">
+                                <td ></td>
+                                <td ></td>
+                                <td ></td>
+                                <td ></td>
+                                <td >Sous-Total HT : {{amount}}</td>
+                            </tr>
+                            <tr class="theme">
+                                <td > </td>
+                                <td ></td>
+                                <td ></td>
+                                <td ></td>
+                                <td >TVA 20% de {{amount}} :  {{tva}}</td>
+                            </tr>
+                            <tr  class="theme">
+                                <td  ></td>
+                                <td ></td>
+                                <td ></td>
+                                <td  ></td>
+                                <td ><b>Total à payer : {{sum_ttc}}</b></td>
+                            </tr>
+                           
+                            <!-- Ajoutez d'autres lignes si nécessaire -->
+                        </tbody>
+                        
+                    </table>
+                </section>
+                <br>
+                <br>
+        
+                <footer>
+                    <br/>
+                    <hr/>
+                      <!-- Conditions générales -->
+                      <div class="conditions-generales">
+                        <h2><b>Conditions Générales</b></h2>
+                        <br/>
+                        <p>
+                            Les Facture  doit être payée dans un delai de 30 jours après sa date d'emmission.En cas de retard de paiement,les penalités
+                            de retard s'élèvent à 10% du montant total à payer de la facture.
+                        </p>
+                        <!-- Ajoutez le texte des conditions générales selon vos besoins -->
+                    </div>
+                    <!-- Lien de paiement -->
+                </footer>
+                <hr/>
+                <br>
+                <br>
+                <br>
+              
+                        <div class="row">
+                                        <div class="lien-paiement">
+                                            <img src="https://qacseafile.cpp-system.com/pictures?xys=Cpp-Transport/test|czwG05JncxGuBm0JOQ7X.png"  width="100"height="50" alt="Image dans le pied de page"><br/>
+                            
+                                            <img src="https://qacseafile.cpp-system.com/pictures?xys=Cpp-Transport/test|4DOMxN4bSqWUEB0hhftj.jpg" style="margin-left: 84%;margin-top: -6em;" width="100"height="50" alt="Image dans le pied de page">
+                                        
+                                        </div>
+                                        <p style="margin-top: 0em;text-align: left;"><b>Payer en ligne.</b> Scannez le QRCode!</p>
+                                        <p style="margin-top:-3em;margin-left: 50.5em;">&copy Cpp-system</p>
+                                        
+                        </div>
+            
+                <br/>
+                <br>
+                <br>
+             
+            </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

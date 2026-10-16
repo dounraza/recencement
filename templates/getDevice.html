@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block title %}CPP-SYSTEM | SMS Service {% endblock %}
+
+{% block content %}
+<style>
+    #sendSms_filter{
+        margin-left: 58%;
+        margin-top: -4.2em;
+    }
+    .pagination{
+        margin-left: 68%;
+    }
+</style>
+<hr/>
+<h4>BATCH SMS CPP-SYSTEM <a href="{{url_for('dashboard')}}" class="btn btn-xs btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-return-left" viewBox="0 0 16 16">
+    <path fill-rule="evenodd" d="M14.5 1.5a.5.5 0 0 1 .5.5v4.8a2.5 2.5 0 0 1-2.5 2.5H2.707l3.347 3.346a.5.5 0 0 1-.708.708l-4.2-4.2a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 8.3H12.5A1.5 1.5 0 0 0 14 6.8V2a.5.5 0 0 1 .5-.5z"/>
+  </svg></a>  </h4>
+  
+  <div class="row gx-5">
+        <div class="col-md">
+            <div class="form-floating">
+        
+                 <select class="form-select" aria-label="Default select example"name="type" id="type" placeholder="type">
+                    <option value="----">TYPE TPE</option>
+                    <option value="tpeBus">BUS</option>
+                    <option value="tpeCollect">COLLECT</option>
+                    <option value="kiosk">KIOSK</option>
+                  </select>
+            </div>
+        </div>
+  </div>
+  
+  <br/>
+  <div class="d-grid gap-2 col-6 mx-auto">
+   <button class="btn btn-danger" id="extraire" onclick="myFunction()" data-loading-text="get all Device..."> <span class="spinner"><i class="fa fa-refresh fa-spin" id="js-loads"></i></span>Extraire</button>
+   <input type="text"  class="hidden" id="js-text" value="" readonly>
+   
+  </div>
+
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script>
+   function  traitement(d)
+  {
+    uri="/getAllDevice";
+        $.ajax({
+          type: 'POST',
+          url: uri,
+          async: true,
+          data: {'type':d},
+          datatype:"html",
+          success: function(text) {
+            $('#js-text').removeClass('hidden');
+            $('#js-text').val(text);
+            $("#extraire").text("prends les info");
+          },
+
+          error: function() {
+            console.log('La requête n\'a pas abouti');
+            $("#extraire").text("get all Device.");
+          }
+
+        });
+  }
+  function myFunction() {
+    $("#extraire").text("Loading...");
+    $("#js-loads").removeClass('spinner');
+    var d= document.getElementById("type").value; 
+    //traitement(d,f);
+    if(d===''){
+      alert('Veuillez selectionnee le type');
+    }
+    else{
+      console.log(d);
+      console.log("###");
+      traitement(d)
+    }
+   
+  
+  }
+  
+</script>
+{% endblock %}

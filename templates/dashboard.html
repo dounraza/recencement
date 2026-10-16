@@ -1,0 +1,298 @@
+{% extends "base.html" %}
+{% block title %} CPP-SYSTEM MADAGASCAR {% endblock %}
+
+{% block content %}
+<style>
+  body { background: #f5f6f8 !important; font-family: Inter, system-ui, -apple-system, "Segoe UI", sans-serif; color: #171717; }
+  .dashboard-hero { position: relative; overflow: hidden; margin: 24px 0 28px; padding: 32px 36px; border-radius: 22px; color: #fff; background: linear-gradient(120deg, #111 0%, #242424 58%, #b5121b 100%); box-shadow: 0 14px 30px rgba(0,0,0,.16); }
+  .dashboard-hero:after { content: ""; position: absolute; width: 240px; height: 240px; right: -70px; top: -90px; border: 35px solid rgba(255,255,255,.08); border-radius: 50%; }
+  .dashboard-hero h1 { position: relative; z-index: 1; font-size: clamp(1.45rem, 3vw, 2.25rem); font-weight: 800; letter-spacing: -.03em; }
+  .dashboard-hero p, .dashboard-hero a { position: relative; z-index: 1; }
+  .dashboard-hero .dashboard-user { color: #ffced1; font-weight: 700; }
+  .dashboard-hero .btn { border: 0; color: #111; background: #fff; font-weight: 750; }
+  .dashboard-hero .btn:hover { color: #fff; background: #b5121b; }
+  .dashboard-hero ~ .row .card { height: 100%; border: 1px solid #e8e8e8; border-radius: 16px; background: #fff; box-shadow: 0 7px 18px rgba(0,0,0,.055); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  .dashboard-hero ~ .row .card:hover { transform: translateY(-5px); border-color: #d22a34; box-shadow: 0 14px 25px rgba(181,18,27,.12); }
+  .dashboard-hero ~ .row .card-body { padding: 22px; }
+  .dashboard-hero ~ .row .card-title { color: #171717; font-weight: 800; font-size: 1rem; }
+  .dashboard-hero ~ .row .card-text { min-height: 42px; color: #707070; font-size: .9rem; }
+  .dashboard-hero ~ .row .btn { width: 100%; border: 0; border-radius: 9px; color: #fff; background: #b5121b; font-weight: 700; }
+  .dashboard-hero ~ .row .btn:hover { background: #111; }
+  .dashboard-hero ~ hr { border-color: #e3e3e3; opacity: 1; margin: 28px 0; }
+  .dashboard-hero ~ h4 { display: none; }
+  @media (max-width: 768px) {
+    .dashboard-hero { margin: 12px 0 20px; padding: 24px 20px; border-radius: 16px; }
+    .dashboard-hero .btn { width: 100%; margin-top: 12px; }
+    .dashboard-hero ~ .row > [class*="col-"] { margin-bottom: 14px; }
+  }
+</style>
+<div class="dashboard-hero d-flex justify-content-between align-items-center flex-wrap gap-3">
+  <div>
+    <div class="text-uppercase small opacity-75">CPP-System · Gestion transport</div>
+    <h1 class="mb-2">Bienvenue sur votre tableau de bord</h1>
+    <p class="mb-0">Bonjour <span class="dashboard-user">{{name}}</span>, retrouvez rapidement vos outils de gestion.</p>
+  </div>
+  <a href="{{url_for('logout')}}" class="btn px-4">Déconnexion <i class="fa fa-sign-out ms-1"></i></a>
+</div>
+<hr/>
+<h4>BATCH CPP-SYSTEM  <a href="{{url_for('logout')}}" alt="deconnecter" class="col-lg-2 pull-right">{{name}}  <i class="btn btn-dark fa fa-sign-out"></i></a></h4>
+
+<div class="row">
+  <div class="col-sm-3 mb-3">
+    <div class="card border-primary h-100">
+      <div class="card-body">
+        <h5 class="card-title">Recensement véhicules</h5>
+        <p class="card-text">Enregistrer les véhicules, propriétaires et photos.</p>
+        <a href="{{url_for('recensement_vehicules')}}" class="btn btn-primary">Ouvrir</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3 mb-3">
+    <div class="card border-dark h-100">
+      <div class="card-body">
+        <h5 class="card-title">Recensement chauffeurs</h5>
+        <p class="card-text">Chauffeurs, photos et documents de permis.</p>
+        <a href="{{url_for('recensement_chauffeurs')}}" class="btn btn-dark">Ouvrir</a>
+      </div>
+    </div>
+  </div>
+{% if role == 1 %}
+<div class="row">
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Extraction journalière</h5>
+        <p class="card-text">Envoyer les données vers cpp transport.</p>
+        <a href="{{url_for('showing')}}" class="btn btn-warning">Extract Data</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Extract Incident Support</h5>
+        <p class="card-text">Prends les informations Support.</p>
+        <a href="{{url_for('getIncident')}}" class="btn btn-warning">Extract Incident</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Extract Pointage</h5>
+        <p class="card-text">Get informations sur les pointages.</p>
+        <a href="{{url_for('getPointage')}}" class="btn btn-warning">Extract Pointage</a>
+      </div>
+    </div>
+  </div>
+  
+ 
+    <div class="col-sm-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Extract Commission</h5>
+          <p class="card-text">Get toutes les commissions mensuel</p>
+          <a href="{{url_for('getCommission')}}" class="btn btn-warning">Extract commission</a>
+        </div>
+      </div>
+  
+  </div>
+  <hr/>
+</div>
+
+  <div class="row">
+    <div class="col-sm-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Suivi Papier</h5>
+          <p class="card-text">Signaler par SMS les proprietaires de bus .</p>
+          <a href="{{url_for('sendSms')}}" class="btn btn-warning">Send SMS</a>
+        </div>
+      </div>
+    </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Add Information</h5>
+        <p class="card-text">Ajouter les informations brouillons.</p>
+        <a href="{{url_for('setInfo')}}" class="btn btn-warning">Get Infos</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Get Device Esper</h5>
+        <p class="card-text">Get info des TPE  dans Esper.</p>
+        <a href="{{url_for('getDevice')}}" class="btn btn-warning">Extract Info Arret</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-3">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">Mise à jours Arret</h5>
+        <p class="card-text">Prends les informations Arret.</p>
+        <a href="{{url_for('getDataArret')}}" class="btn btn-warning">Extract Info Arret</a>
+      </div>
+    </div>
+  </div>
+
+  </div>
+  <hr>
+  <div class="row">
+ <div class="col-sm-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Serveur</h5>
+          <p class="card-text">Tester Les Serveurs</p>
+          <a href="{{url_for('setviewServer')}}" class="btn btn-warning">Lancer</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Versement</h5>
+          <p class="card-text">Envoyer les demandes de versement. </p>
+          <a href="{{url_for('sendversement')}}" class="btn btn-warning">Send Versement</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">TEST SMS</h5>
+          <p class="card-text">TEST API SMS. </p>
+          <a href="{{url_for('testsms')}}" class="btn btn-warning">Send Versement</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">LOTTERY CPP</h5>
+          <p class="card-text">TIRAGE Au SORT. </p>
+          <a href="{{url_for('lottery')}}" class="btn btn-warning">Tirage</a>
+        </div>
+      </div>
+    </div>
+    <hr>
+    <div class="col-sm-3">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Pay CPP</h5>
+          <p class="card-text">Extract Mensuel. </p>
+          <a href="{{url_for('pay_cpp')}}" class="btn btn-warning">EXtract</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr/>
+
+  {% endif %}
+  {% if  role == 2 %}
+  
+  <div class="row mt-5">
+  <div class="col-md-12">
+  
+    <div class="col-md-4" style="width: 19em;">
+      <!-- <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Upload File Vehicule/Préposé</h5>
+          <p class="card-text">Envoyer les fichiers</p>
+          <a href="{{url_for('viewUpload')}}" class="btn btn-warning">upload</a>
+        </div>
+      </div> -->
+    
+    </div>
+    <div class="col-md-4" style="width: 19em;">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Upload File Vehicule/Préposé V2 </h5>
+          <p class="card-text">Envoyer les fichiers</p>
+          <a href="{{url_for('setviewViewUpl')}}" class="btn btn-warning">upload</a>
+        </div>
+      </div>
+    
+    </div>
+    <div class="col-md-4" style="width: 19em;">
+      <!-- <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Reconizer</h5>
+          <p class="card-text">Check image or  file</p>
+          <a href="{{url_for('setviewReconizer')}}" class="btn btn-warning">Reconizer</a>
+        </div>
+      </div> -->
+    </div>
+  </div>
+  </div>
+  <div class="row mt-5">
+ 
+    <div class="col-md-12">
+    <div class="col-md-6" style="width: 19em;">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Pointage</h5>
+          <p class="card-text">Pointage du jour</p>
+          <a href="{{url_for('listeViewVehicule')}}" class="btn btn-warning">Liste</a>
+        </div>
+      </div>
+    </div>
+    </div>
+    <div class="row mt-5">
+    <div class="col-md-12">
+      <div class="col-md-6" style="width: 19em;">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Telecharger les fichiers </h5>
+            <p class="card-text">Telecharger les fichiers de pointage</p>
+            <a href="{{url_for('setviewDownload')}}" class="btn btn-warning">Download</a>
+          </div>
+        </div>
+      </div>
+      </div>
+    <!-- <div class="col-md-6" style="width: 19em;">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">Pointage Or Reconnaissance</h5>
+          <p class="card-text">Upload all image or  file</p>
+          <a href="{{url_for('setviewVehicule')}}" class="btn btn-warning">Reconizer</a>
+        </div>
+      </div>
+    </div> -->
+    
+  </div>
+</div>
+  {% endif %}
+  {% if  role == 3 %}
+  <div class="row mt-5">
+ 
+    <div class="col-md-12">
+      <div class="col-md-6" style="width: 19em;">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Lancer une extraction</h5>
+            <p class="card-text">Telecharger les fichiers des events</p>
+            <a href="{{url_for('view_event')}}" class="btn btn-warning">Extraction</a>
+          </div>
+        </div>
+      </div>
+    
+      
+   
+      <div class="col-md-6" style="width: 19em;">
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Telecharger les fichiers </h5>
+            <p class="card-text">Telecharger les fichiers des events</p>
+            <a href="{{url_for('get_file_event')}}" class="btn btn-warning">Download</a>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

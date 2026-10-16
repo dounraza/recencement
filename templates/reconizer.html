@@ -1,0 +1,70 @@
+
+
+{% extends "base.html" %}
+{% block title %}CPP-SYSTEM | Reconizer {% endblock %}
+
+{% block content %}
+   
+    <div class="container text-center mb-5 mt-5">
+        <div class="row">
+            <div class="col-md-12">
+                <h4><b>Reconnaissance des bus</b></h4>
+            </div>
+        </div>
+    </div>
+    
+    <section class="bg-diffrent">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xl-8">
+                    <form action="{{url_for('reconizer')}}" method="POST" enctype="multipart/form-data">
+                       <center>
+                        <div class="progress">
+                            <div class="progress-bar" id="progressBar" role="progressbar" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                              0%
+                            </div>
+                          </div>
+                          <input type="file" name="fichier" accept="image/*" capture="environment">
+                        
+                         <button class="btn btn-xs btn-primary" id="upload">Check</button>
+                        </center>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function updateProgress(percentage){
+            
+            if(percentage > 100) percentage = 100;
+            $('#progressBar').css('width', percentage+'%');
+            $('#progressBar').html(percentage+'%');
+            
+        }
+        // setInterval(updateProgress(Math.floor(Math.random() * 1000)), 1000);
+       
+$('#upload').on('click', function (e) {
+    let files = new FormData(), // you can consider this as 'data bag'
+        url = 'uploadMyFiles';
+
+    files.append('fichier', $('#fichier')[0].files[0]); // append selected file to the bag named 'file'
+
+    $.ajax({
+        type: 'POST',
+        url: url,
+        processData: false,
+        contentType: false,
+        data: files,
+        success: function (response) {
+            console.log(response);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+});
+    </script>
+    {% endblock %}
+ 

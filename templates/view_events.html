@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% block title %} CPP-SYSTEM | EXTRACT DATA {% endblock %}
+
+{% block content %}
+<style>
+    @import url(https://unpkg.com/@webpixels/css/dist/index.css);
+ 
+    #spinner-div {
+            position: fixed;
+            display: none;
+            width: 100%;
+            height: 100%;
+            top: 25;
+            left: 0;
+            text-align: center;
+            background-color: rgba(255, 255, 255, 0.8);
+            z-index: 2;
+            margin-top:-4%;
+
+}
+</style>
+<body>
+  
+        <div class="row">
+        <div class="pull-left mt-3"><a href="{{url_for('dashboard')}}" class="btn btn-xs btn-dark"> <i class="fa fa-home"></i> Retour</a>&nbsp </div>
+    </div> 
+        <br/>
+        <div id="spinner-div" class="pt-5">
+            <div class="spinner-border text-primary" role="status">
+            </div>
+          </div>
+        <div class="mt-5">
+            <div class="mb-3">   <br/>
+            <label for="exampleInputEmail1" class="form-label">Date Début</label>
+            <input type="date" class="form-control"   name="datebegin" id="datebegin" aria-describedby="dateDebut" required>
+            </div>
+            <div class="mb-3">
+            <label for="exampleInputPassword1" class="form-label">Date Fin</label>
+            <input type="date"  name="dateend" id="dateend" class="form-control" required >
+            </div>
+        
+          <!-- <button type="submit" id="getResultsBtn"  class="btn btn-danger">Lancer</button> -->
+          <div class="form-control mt-5">
+            <textarea id="resultsTextarea" rows="10" cols="50"></textarea><br>
+            </div>
+                <div class="col-6">
+                <button type="button" class="btn btn-danger my-2" id="getResultsBtn">Lancer</button>
+                </div>
+         </div>
+       
+          
+</body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<script>
+      $(document).ready(function(){
+            // Lorsque le bouton est cliqué
+            $("#getResultsBtn").click(function(){
+                // Effectuer une requête AJAX vers Flask
+                
+                var buttons = document.querySelectorAll(".btn");
+
+                // Loop through each button and disable it
+                buttons.forEach(function(button) {
+                    button.disabled = true;
+                });
+                var debut=$('#datebegin').val();
+                var fin=$('#dateend').val();
+                $("#spinner-div").show();
+                $.ajax({
+                    url: '/get_results',
+                    type: 'POST',
+                    data:{
+                        datebegin:debut,
+                        dateend:fin,
+                    },
+                    success: function(data) {
+                        // Mettre à jour le textarea avec les résultats
+                        $("#resultsTextarea").val(data.join("\n"));
+                        $("#spinner-div").hide(); 
+                        var buttons = document.querySelectorAll(".btn");
+
+                        // Loop through each button and disable it
+                        buttons.forEach(function(button) {
+                            button.disabled = false;
+                        });
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Erreur lors de la requête AJAX:', status, error);
+                    }
+                });
+            });
+
+
+            // $("#getResultsBtn").click(function () {//The load button
+            //     $("#spinner-div").show(); //Load button clicked show spinner
+            //     $.ajax({
+            //     url: '/get_results', //Takes 2 seconds to complete this request
+            //     type: "POST",
+            //     dataType: "json",
+            //     data:{
+            //             datebegin:debut,
+            //             dateend:fin,
+            //         },
+            //     success: function (res) {
+            //         $("#resultsTextarea").val(data.join("\n"));
+            //     },
+            //     complete: function () {
+            //         $("#spinner-div").hide(); //Request is complete so hide spinner
+            //     }
+            //     });
+            // });
+        });
+        
+
+</script>
+{% endblock %}

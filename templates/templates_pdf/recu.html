@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .invoice {
+            width: 80%;
+            margin: 20px auto;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .invoice-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .invoice-header h2 {
+            margin: 0;
+        }
+        .invoice-details {
+            margin-bottom: 20px;
+        }
+        .invoice-details p {
+            margin: 5px 0;
+        }
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            text-align: left;
+        }
+        .invoice-footer {
+            margin-top: 20px;
+        }
+        .invoice-footer p {
+            margin: 5px 0;
+        }
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .logo img {
+            max-width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <div class="invoice">
+        <div class="logo">
+            <img src="https://qacseafile.cpp-system.com/pictures?xys=Cpp-Transport/test|4DOMxN4bSqWUEB0hhftj.jpg" alt="Your Company Logo" width="40" height="20">
+        </div>
+        <div class="invoice-header">
+            <h2>RECU PAIEMENT</h2>
+        </div>
+        <div class="invoice-details">
+            <p><strong>Recu n° :</strong> INV-001</p>
+            <p><strong>Date:</strong> January 1, 2024</p>
+            <p><strong>Date d'échéance:</strong> January 15, 2024</p>
+        </div>
+        <table class="invoice-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Qté</th>
+                    <th>Moyen de Paiement</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Product 1</td>
+                    <td>2</td>
+                    <td>MBM</td>
+                    <td>$100.00</td>
+                </tr>
+                <tr>
+                    <td>Product 2</td>
+                    <td>1</td>
+                    <td>MBM</td>
+                    <td>$80.00</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="3" style="text-align: right;"><strong>Total:</strong></td>
+                    <td>$180.00</td>
+                </tr>
+            </tfoot>
+        </table>
+        <div class="invoice-footer">
+            <p><strong> Instructions de paiement : </strong> Veuillez effectuer le paiement avant la date d'échéance.</p>
+            <p>For any queries, contact us at example@example.com</p>
+        </div>
+    </div>
+</body>
+</html>

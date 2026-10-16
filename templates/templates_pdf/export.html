@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>  
+    <title>Export</title>
+   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+         #mybody{
+            background-color: #fffcfc;
+        }
+        .container {
+             width: 21cm;
+             min-height: 29.7cm;
+        }
+
+.invoice {
+  background: #fff;
+  width: 100%;
+  
+}
+    table,th,td{
+        border:1px solid #000;
+    
+    }
+    th,td{
+        font-size:16px;
+        padding:4px;
+        text-align: center;
+        color: black;
+    }
+    .custom-table {
+        border: 2px solid #000000; /* Blue border color */
+    }
+    </style>
+</head>
+<body>
+    <br/>
+    <br/>
+    <div class="container1">
+        <div class="invoice">
+
+                <div class="row col-md-9">
+                   
+                            <div class="col-md-3"style="margin-bottom: -6em;">
+                                <img src="{{url_image}}"  width="120" height="120" class="logow"/>
+                            </div>
+                                <div class="col-md-3"style="margin-top: -2em;">
+                                    <h2 class="align"><div class="text-center"><b>RELEVÉ D'ACTIVITÉ DU PERSONNEL</b></div><br/>
+                                        <b> <div class="text-center"> NOM & PRENOM :</b> {{name}}</div>
+                                        <b><div class="text-center"> FONCTION : </b> {{fonction}}</div> <br/>
+                                    
+
+                                    </h2>
+                                
+                                </div>
+                            <div class="col-md-3" style="margin-left: 73em;margin-top: -10em;">
+                                <b><h4 style="font-size: 18px;">DATE : {{date}}</b></h4>
+                                <b><h4 style="font-size: 18px;">PERIODE : {{periode}}</b></h4>
+                            </div>
+              
+                </div>
+                <br/>
+                <br/>
+                <br/>
+            <!-- <p style="font-size:10px;margin-left:10%">Relevé de véhicule :<b>2927TBB </b> du mois de : <b>OCTOBRE</b> Nombre de jour travaillé 19 Numero: RM00001</p> -->
+            <!-- <div class="row col-md-12"> -->
+                <div class="row col-md-12" >
+                    <p class="addressDriver"style="font-size: 20px;" >
+                        Nombre de jour travaillé  :<em >{{njt}}</em><br/>
+                        <span >Salaire de base : {{sb}} </span>
+                        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+                  &emsp;&emsp;&emsp;&emsp;&emsp;<span >Réf du doc : {{ref}}</span>
+                  &emsp;    &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;<span>COOPERATIVE : {{cooperative}}</span> 
+                    </p>
+                </div>
+                <br/>
+                <hr/>
+                <br/>
+    <div class="row col-md-9">
+    <table class="custom-table"style="height: 100%!important;">
+        <thead>
+        <tr>
+            <th>DATE</th>
+            <th>PRESENCE</th>
+            <th>BUS</th>
+            <th>PRIME RENDEMENT</th>
+            <th>PRIME PUB</th>
+            <th>PANIER REPAS</th>
+            <th>AVANCE</th>
+            <th>NOTE DE SERVICE</th>
+            
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in record %}
+        <tr>
+            <td>{{item["date"]}}</td>
+            <td>{{item["presence"]}}</td>
+            <td>{{item["vehicule"]}}</td>
+            <td>{{item["prime_rend"]}}</td>
+            <td>{{item["prime_pub"]}}</td>
+            <td>{{item["panier_repas"]}}</td>
+            <td>{{item["avance"]}}</td>
+            <td>{{item["note"]}}</td>
+          
+        </tr>
+        {% endfor %}
+      
+       
+        <!-- <tr>
+                    <td><strong>Total HT</strong></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                   
+                    <td class="text-right" th:text="${totalHT}">0,00€</td>
+                </tr> -->
+            
+        </tbody>
+    </table>
+    <br/>
+    <hr/>
+    <br/>
+    <table class="custom-table" border="1px">
+        <thead>
+        <tr>
+            <th>DESIGNATION</th>
+            <th>MOTANT EN ARIARY</th>   
+        </tr>
+        </thead>
+        <tbody>
+            {% for item in designation %}
+                <tr>
+                    <td>{{item['designation']}}</td>
+                    <td>{{'{:,}'.format( item['amount'])}}</td>
+                </tr>
+                {% endfor %}
+               
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
+</body>
+</html>
