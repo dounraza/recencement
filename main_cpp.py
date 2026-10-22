@@ -51,15 +51,23 @@ jwt = JWTManager(app)
 cnf= Configuration()
 
   
-config = dotenv_values(".env")
+config = {
+    **dotenv_values(".env"),
+    **os.environ
+}
+url = config.get('APP_URL', 'http://127.0.0.1:5000/')
 
-# config = dotenv_values("c:/wamp64/www/extract/cpptransportextract/.env")
-url=config['APP_URL']
+if os.environ.get('VERCEL'):
+    default_db_uri = 'sqlite:////tmp/database.db'
+else:
+    default_db_uri = 'sqlite:///database.db'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', default_db_uri)
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'thisisasecretkey')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
-app.config['SECRET_KEY'] = 'thisisasecretkey'
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
  
 # app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 login_manager = LoginManager()
@@ -3699,7 +3707,10 @@ def signal_handler(sig, frame):
         print("Serveur en cours d'arrêt.")
         sys.exit()
 
-signal.signal(signal.SIGINT, signal_handler)
+try:
+    signal.signal(signal.SIGINT, signal_handler)
+except (ValueError, AttributeError):
+    pass
 def main():
     appid = config['PARSE_APP_ID']
     rest_api_key = config['PARSE_API_KEY_REST']
