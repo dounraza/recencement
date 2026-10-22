@@ -40,7 +40,7 @@ sib-api-v3-sdk==7.6.0
 
 # Data Processing
 # numpy==1.23.5
-openpyxl==3.0.1
+openpyxl==3.1.5
 # pandas==1.5.2  # Reste en commentaire
 pillow==9.5.0  # Ajout de la version
 
@@ -51,7 +51,6 @@ pdfkit==1.0.0
 # Archives
 rarfile==4.0
 unrar==0.4
-openpyxl>=3.1.2
 
 # Utilitaires
 docopt==0.6.2
